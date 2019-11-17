@@ -1,10 +1,10 @@
-#Simulations
+# Simulations
 
 This directory contains the output from 
-discoal simulations and diploSHIC featureVectors.
+[`discoal`](https://github.com/kern-lab/discoal) simulations and 
+[`diploSHIC`](https://github.com/kern-lab/diploSHIC) featureVectors.
 
 The subdirectories contain different population demographies.
-
 Within a demographic model are the following subdirectories:
 
   - `alpha/` contains a file for each gamma distribution.
@@ -25,5 +25,8 @@ that are to be concatenated to a single `fvecs${simIndex}.tsv` file.
   - `params/` contains the `shape` and `scale` hyperparameters
 used to draw selection coefficients from a gamma distribution. 
 These will be transformed to be the targets for the CNN.
+
+  - `trainingData/` contains the input tensors and targets for the CNN,
+saved as numpy arrays.
 
 The numerical suffix in the filenames denotes the index for each simulation.
