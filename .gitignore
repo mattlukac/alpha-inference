@@ -2,6 +2,6 @@ data/
 pipeline/1000Genomes/
 pipeline/humanSpecificSites/
 pipeline/slurm*
-sims/
+sims/*/
 scripts/clinEff
 scripts/snpEff
