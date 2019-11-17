@@ -1,0 +1,7 @@
+data/
+pipeline/1000Genomes/
+pipeline/humanSpecificSites/
+pipeline/slurm*
+sims/
+scripts/clinEff
+scripts/snpEff

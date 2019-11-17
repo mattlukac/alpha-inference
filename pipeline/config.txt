@@ -1,0 +1,11 @@
+alphaDraws=500
+bigWinSize=200000
+numSubWins=25
+shapeMin=0.3
+shapeMax=8.0
+scaleMin=50
+scaleMax=1500
+trainingSetSize=10000
+numChannels=500
+numBootChannels=200
+numBootSamples=50

@@ -1,0 +1,26 @@
+#!/bin/bash
+#SBATCH --account=kernlab
+#SBATCH --partition=kern
+#SBATCH --nodes=1
+#SBATCH --job-name=fvecs
+#SBATCH --time=2:00:00
+#SBATCH --mem-per-cpu=32G
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=1
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=mlukac@uoregon.edu
+
+# this batch file should run a python script 
+# that reads in the parameter and feature vector files
+# and saves them with the center and scale constants 
+# in order to set up training the model
+
+module load python3/3.6.7
+
+source config.txt
+export trainingSetSize
+export numChannels
+export bootSize
+export numBootSamples
+
+python3 save_training_data.py 
