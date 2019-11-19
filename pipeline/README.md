@@ -6,7 +6,8 @@ to run alpha-infer from start to end.
 - `config.txt` contains all the model parameters.
 - `populations.txt` contains the `discoal` calls for each population.
 
-The general flow of the pipeline is as follows:
+The general flow of the pipeline is as follows 
+(the numbers correspond to the scripts prefixed with the same number):
 
 1. Run coalescent simulations and compute `diploSHIC` feature vectors
 2. Wrangle the training data and targets into numpy arrays.
