@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # initialize directory and read tensor shape parameters
-to_sims = '/projects/kernlab/mlukac/selection_coef_inference/data/dl_data/25_subwindows2/'
+to_sims = '/projects/kernlab/mlukac/alpha-infer/data/dl_data/25_subwindows2/'
 
 x = np.load(to_sims + 'demog_images.npy')
 #logY = np.load(to_sims + 'trainingData/targets.npy')

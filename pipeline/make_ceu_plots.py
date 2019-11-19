@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # initialize directory and read tensor shape parameters
-to_sims = '/projects/kernlab/mlukac/selection_coef_inference/sims/ceu/'
+to_sims = '/projects/kernlab/mlukac/alpha-infer/sims/ceu/'
 
 x = np.load(to_sims + 'trainingData/fvecs.npy')
 logY = np.load(to_sims + 'trainingData/targets.npy')
