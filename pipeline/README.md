@@ -16,5 +16,7 @@ The general flow of the pipeline is as follows
 5. Using bed files with windows centered on human specific sites
 in several genomic regions (synonymous, missense, etc.), 
 compute diploSHIC feature vectors.
-6. Predict on many replicate samples of feature vectors, 
+6. Wrangle and save the feature vectors.
+7. Predict on many replicate samples of feature vectors, 
 and compare results across different genomic regions.
+
