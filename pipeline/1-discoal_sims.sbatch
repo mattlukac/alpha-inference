@@ -45,6 +45,9 @@ touch ../sims/${popName}/fvecs/new/fvecs${j}.tsv
 
 #for each alpha run discoal, and store output in discout
 #then compute feature vector and append to fvec file
+export numSubWins
+export bigWinSize
+
 for i in `seq 0 $((${alphaDraws}-1))`; do
   eval ${!popName}
   python /projects/kernlab/shared/diploSHIC_snakemake/diploSHIC/diploSHIC.py fvecSim diploid ../sims/${popName}/discout/discout${j}/alpha${i}.msOut ../sims/${popName}/fvecs/temp/alpha${i}_${j}.msOut.diploid.fvec --numSubWins ${numSubWins} --totalPhysLen ${bigWinSize}
