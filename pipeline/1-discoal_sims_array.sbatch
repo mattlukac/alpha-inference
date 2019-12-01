@@ -4,12 +4,12 @@
 #SBATCH --nodes=1
 #SBATCH --job-name=discoal_sim
 #SBATCH --time=3:00:00
-#SBATCH --mem-per-cpu=36G
+#SBATCH --mem-per-cpu=50G
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=mlukac@uoregon.edu
-#SBATCH --array=1-1000%60
+#SBATCH --array=1-2
 
 module load diploshic
 
