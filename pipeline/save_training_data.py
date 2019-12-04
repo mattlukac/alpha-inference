@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import os
+import sys
 
 #####
 ## Here we save several numpy arrays for training the CNN.
@@ -13,7 +14,8 @@ import os
 ######
 
 # initialize directory and read tensor shape parameters
-to_sims = '/projects/kernlab/mlukac/selection_coef_inference/sims/ceu/'
+pop = sys.argv[1] + '/'
+to_sims = '/projects/kernlab/mlukac/selection_coef_inference/sims/' + pop
 numTensors = int(os.environ['trainingSetSize'])
 numChannels = int(os.environ['numChannels'])
 numBootChannels = int(os.environ['numBootChannels'])
