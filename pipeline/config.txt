@@ -5,7 +5,10 @@ shapeMin=0.3
 shapeMax=8.0
 scaleMin=50
 scaleMax=1000
-trainingSetSize=500
+trainingSetSize=1000
 numChannels=300
 numBootChannels=200
 numBootSamples=50
+
+
+chr2Length=243199373
