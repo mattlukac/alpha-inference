@@ -5,3 +5,4 @@ pipeline/slurm*
 sims/*/
 scripts/clinEff
 scripts/snpEff
+models/
