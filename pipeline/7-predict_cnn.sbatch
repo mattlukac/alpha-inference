@@ -9,8 +9,10 @@
 #SBATCH --cpus-per-task=1
 #SBATCH	--mail-type=ALL
 #SBATCH	--mail-user=mlukac@uoregon.edu
+#SBATCH --gres=gpu:0
 
-module load python3/3.6.7
+module load cuda/9.0
+module load python3
 
 category=$1
 trainingPop=$2
