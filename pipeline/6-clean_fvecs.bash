@@ -1,7 +1,10 @@
 #!/bin/bash
 
 category=$1
-direc=humanSpecificSites/${category}/fvecs
+population=$2
+chromosome=$3
+
+direc=humanSpecificSites/${category}/${population}FvecsChr${chromosome}
 
 # make extraLine/ directory if it doesn't exist
 if [ ! -d "${direc}/extraLine/" ]; then

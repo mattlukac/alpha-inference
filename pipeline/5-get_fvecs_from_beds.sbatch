@@ -30,10 +30,10 @@ segStart=$(head -n $i humanSpecificSites/${category}/chr2_${category}_windows_hs
 segEnd=$(head -n $i humanSpecificSites/${category}/chr2_${category}_windows_hspec.bed | tail -n 1 | awk '{print $3}')
 
 # now compute feature vectors for the desired window
-python /projects/kernlab/shared/diploSHIC_snakemake/diploSHIC/diploSHIC.py fvecVcf diploid 1000Genomes/vcfs/${population}/ALL.chr${chromosome}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf $chromosome $chrLength humanSpecificSites/${category}/fvecs/${i}_from_${segStart}_to_${segEnd}.fvec.test --numSubWins $numSubWins --segmentStart ${segStart} --segmentEnd ${segEnd} --winSize $bigWinSize
+python /projects/kernlab/shared/diploSHIC_snakemake/diploSHIC/diploSHIC.py fvecVcf diploid 1000Genomes/vcfs/${population}/ALL.chr${chromosome}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf $chromosome $chrLength humanSpecificSites/${category}/${population}FvecsChr${chromosome}/${i}_from_${segStart}_to_${segEnd}.fvec --numSubWins $numSubWins --segmentStart ${segStart} --segmentEnd ${segEnd} --winSize $bigWinSize
 
 # if there were 0 unmasked snps, remove the file
-j=$(wc -l < humanSpecificSites/${category}/fvecs/${i}_from_${segStart}_to_${segEnd}.fvec.test)
+j=$(wc -l < humanSpecificSites/${category}/${population}FvecsChr${chromosome}/${i}_from_${segStart}_to_${segEnd}.fvec)
 if [ $j == 1 ]; then
-  rm humanSpecificSites/${category}/fvecs/${i}_from_${segStart}_to_${segEnd}.fvec.test
+  rm humanSpecificSites/${category}/${population}FvecsChr${chromosome}/${i}_from_${segStart}_to_${segEnd}.fvec
 fi 
