@@ -9,12 +9,12 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=mlukac@uoregon.edu
-#SBATCH --array=501-1000%30
+#SBATCH --array=1001-2000%25
 
 module load diploshic
 
 j=${SLURM_ARRAY_TASK_ID}
-popName=${1}
+popName=$1
 
 #read model parameter values
 source config.txt
