@@ -4,7 +4,7 @@
 #SBATCH --nodes=1
 #SBATCH	--job-name=vcf_fvecs
 #SBATCH --time 2:00:00
-#SBATCH --mem-per-cpu=86G
+#SBATCH --mem-per-cpu=100G
 #SBATCH	--ntasks=1
 #SBATCH --cpus-per-task=1
 #SBATCH	--mail-type=ALL
