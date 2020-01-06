@@ -3,34 +3,46 @@
 #SBATCH --partition=kern
 #SBATCH --nodes=1
 #SBATCH	--job-name=vcf_fvecs
-#SBATCH --time 2:00:00
-#SBATCH --mem-per-cpu=100G
+#SBATCH --time 1:00:00
+#SBATCH --mem-per-cpu=10G
 #SBATCH	--ntasks=1
 #SBATCH --cpus-per-task=1
 #SBATCH	--mail-type=ALL
 #SBATCH	--mail-user=mlukac@uoregon.edu
-#SBATCH --array=1-3
+#SBATCH --array=1-1000%40
 
 # this batch script uses diploshic to compute feature vectors
 # within evenly space human specific sites that is generated from the previous script
 
 module load diploshic
 
+# input parameters
 population=$1
 category=$2
 chromosome=$3
 
+# get chromosome length from config.txt
 source config.txt
 chrLengthName=chr${chromosome}Length
 chrLength=${!chrLengthName}
 
-# for line i get segStart and segEnd
+# get number of lines in bed file
+bedFile=humanSpecificSites/${category}/chr2_${category}_windows_hspec.bed
+nLines=$(wc -l < ${bedFile})
+
+# round down to nearest multiple of 1000 and
+# get step size for 1000 evenly spaced winows
+nLinesMod=$((${nLines} % 1000))
+stepSize=$(((${nLines} - ${nLinesMod})/1000))
+
+# for step i get segStart and segEnd
 i=${SLURM_ARRAY_TASK_ID}
-segStart=$(head -n $i humanSpecificSites/${category}/chr2_${category}_windows_hspec.bed | tail -n 1 | awk '{print $2}')
-segEnd=$(head -n $i humanSpecificSites/${category}/chr2_${category}_windows_hspec.bed | tail -n 1 | awk '{print $3}')
+line=$((${stepSize} * $i))
+segStart=$(head -n ${line} ${bedFile} | tail -n 1 | awk '{print $2}')
+segEnd=$(head -n ${line} ${bedFile} | tail -n 1 | awk '{print $3}')
 
 # now compute feature vectors for the desired window
-python /projects/kernlab/shared/diploSHIC_snakemake/diploSHIC/diploSHIC.py fvecVcf diploid 1000Genomes/vcfs/${population}/ALL.chr${chromosome}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf $chromosome $chrLength humanSpecificSites/${category}/${population}FvecsChr${chromosome}/${i}_from_${segStart}_to_${segEnd}.fvec --numSubWins $numSubWins --segmentStart ${segStart} --segmentEnd ${segEnd} --winSize $bigWinSize
+python /projects/kernlab/shared/diploSHIC_snakemake/diploSHIC/diploSHIC.py fvecVcf diploid 1000Genomes/vcfs/${population}/${population}.chr${chromosome}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.recode.vcf $chromosome $chrLength humanSpecificSites/${category}/${population}FvecsChr${chromosome}/${i}_from_${segStart}_to_${segEnd}.fvec --numSubWins $numSubWins --segmentStart ${segStart} --segmentEnd ${segEnd} --winSize $bigWinSize
 
 # if there were 0 unmasked snps, remove the file
 j=$(wc -l < humanSpecificSites/${category}/${population}FvecsChr${chromosome}/${i}_from_${segStart}_to_${segEnd}.fvec)
