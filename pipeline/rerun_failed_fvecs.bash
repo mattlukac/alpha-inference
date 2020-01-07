@@ -1,6 +1,9 @@
 #!/bin/bash
 
-wc -l ../sims/ceu/fvecs/new/fvec* | grep -v "500 " | grep -oP '(?<=/new/fvecs).*?(?=.tsv)' > failed_jobs.txt
+source config.txt
+lines="$alphaDraws "
+
+wc -l ../sims/ceu/fvecs/new/fvec* | grep -v $lines | grep -oP '(?<=/new/fvecs).*?(?=.tsv)' > failed_jobs.txt
 while read jobNum; do 
   rm ../sims/ceu/alpha/alpha_values${jobNum}.tsv
   rm ../sims/ceu/discout/discout${jobNum}/*

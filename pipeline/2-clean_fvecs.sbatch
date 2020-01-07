@@ -10,17 +10,19 @@
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=mlukac@uoregon.edu
 
-# this batch file should run a python script 
+# this batch file runs a python script 
 # that reads in the parameter and feature vector files
 # and saves them with the center and scale constants 
 # in order to set up training the model
 
 module load python3/3.6.7
 
+popName=$1
+
 source config.txt
 export trainingSetSize
 export numChannels
-export bootSize
+export numBootChannels
 export numBootSamples
 
-python3 save_training_data.py 
+python3 save_training_data.py $popName
