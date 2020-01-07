@@ -12,8 +12,8 @@
 
 module load diploshic
 
-j=${1}
-popName=${2}
+j=$1
+popName=$2
 
 #read model parameter values
 source config.txt
