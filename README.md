@@ -42,9 +42,19 @@ Once the desired population is chosen, say `ceu`, we can simulate the genomic da
 `sbatch 1-discoal_sims_array.sbatch ceu`
 
 The simulated feature vectors and targets will be stored in the `sims/ceu/` directory.
+Sometimes a simulation will fail, so just to be safe we should also run
 
+`bash rerun_failed_jobs.bash ceu`
+
+which identifies which jobs don't have the desired number of Gamma draws and reruns them.
+Once the desired number of simulations are run we simply need to arrange the data 
+to be passed into our neural net. This is done with 
+
+`sbatch 2-clean_fvecs.sbatch ceu`
+
+which will save the training data as numpy arrays, stored the `sims/ceu/trainingData/` directory.
 
 ## Train CNN
-
+We are now ready to train our network using `deep.uoregon.edu`.
 
 ## Predictions
