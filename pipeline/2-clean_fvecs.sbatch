@@ -17,12 +17,12 @@
 
 module load python3/3.6.7
 
-popName=$1
+pop=$1
+trainingSetSize=$(ls ../sims/${pop}/params/* | wc -l)
 
 source config.txt
-export trainingSetSize
 export numChannels
 export numBootChannels
 export numBootSamples
 
-python3 save_training_data.py $popName
+python3 save_training_data.py $pop $trainingSetSize

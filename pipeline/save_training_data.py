@@ -15,8 +15,8 @@ import sys
 
 # initialize directory and read tensor shape parameters
 pop = sys.argv[1] + '/'
+numTensors = int(sys.argv[2])
 to_sims = '/projects/kernlab/mlukac/alpha-infer/sims/' + pop
-numTensors = int(os.environ['trainingSetSize'])
 numChannels = int(os.environ['numChannels'])
 numBootChannels = int(os.environ['numBootChannels'])
 numBootSamples = int(os.environ['numBootSamples'])
