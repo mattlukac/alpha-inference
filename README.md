@@ -56,5 +56,22 @@ which will save the training data as numpy arrays, stored the `sims/ceu/training
 
 ## Train CNN
 We are now ready to train our network using `deep.uoregon.edu`.
+To send the training data over to deep's `/data0/mlukac/ceu/` directory, we run
+
+`bash 3-send_data2deep.bash ceu`
+
+Now we simply need to navigate to `/home/mlukac/alpha-infer/` and run
+
+`python train_logmodel.py ceu`
+
+After training is complete, the model, model history, as well as the loss and fit plots
+will all be stored in `/home/mlukac/alpha-infer/models/ceu/`.
+To finish the training step, we should `rsync` the ceu model directory back to talapas:
+
+`rsync -avzhe ssh models/ceu/ mlukac@talapas-login.uoregon.edu:/projects/kernlab/mlukac/alpha-infer/pipeline/models/`
 
 ## Predictions
+Finally we need to download the data we will predict on. 
+We will use `diploSHIC` again to compute the feature vectors, clean the data as before, and predict on windows centered at
+evenly spaced (wrt ordered list) variant sites.
+

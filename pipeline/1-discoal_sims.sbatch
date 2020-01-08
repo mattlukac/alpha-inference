@@ -4,7 +4,7 @@
 #SBATCH --nodes=1
 #SBATCH --job-name=discoal_sim
 #SBATCH --time=3:00:00
-#SBATCH --mem-per-cpu=36G
+#SBATCH --mem-per-cpu=50G
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mail-type=FAIL,TIME_LIMIT
