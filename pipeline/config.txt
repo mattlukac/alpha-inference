@@ -9,5 +9,28 @@ numChannels=300
 numBootChannels=200
 numBootSamples=50
 
-
+# b37 chromosome lengths
+chr1Length=249250621
 chr2Length=243199373
+chr3Length=198022430
+chr4Length=191154276
+chr5Length=180915260
+chr6Length=171115067
+chr7Length=159138663
+chr8Length=146364022
+chr9Length=141213431
+chr10Length=135534747
+chr11Length=135006516
+chr12Length=133851895
+chr13Length=115169878
+chr14Length=107349540
+chr15Length=102531392
+chr16Length=90354753
+chr17Length=81195210
+chr18Length=78077248
+chr19Length=59128983
+chr20Length=63025520
+chr21Length=48129895
+chr22Length=51304566
+chrXLength=155270560
+chrYLength=59373566
