@@ -9,7 +9,7 @@
 #SBATCH --cpus-per-task=1
 #SBATCH	--mail-type=ALL
 #SBATCH	--mail-user=mlukac@uoregon.edu
-#SBATCH --array=1-1000%40
+#SBATCH --array=5-1000%60
 
 # this batch script uses diploshic to compute feature vectors
 # within evenly space human specific sites that is generated from the previous script
@@ -42,7 +42,7 @@ segStart=$(head -n ${line} ${bedFile} | tail -n 1 | awk '{print $2}')
 segEnd=$(head -n ${line} ${bedFile} | tail -n 1 | awk '{print $3}')
 
 # now compute feature vectors for the desired window
-python /projects/kernlab/shared/diploSHIC_snakemake/diploSHIC/diploSHIC.py fvecVcf diploid 1000Genomes/vcfs/${population}/${population}.chr${chromosome}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.recode.vcf $chromosome $chrLength humanSpecificSites/${region}/${population}FvecsChr${chromosome}/${i}_from_${segStart}_to_${segEnd}.fvec --numSubWins $numSubWins --segmentStart ${segStart} --segmentEnd ${segEnd} --winSize $bigWinSize
+python /projects/kernlab/shared/diploSHIC_snakemake/diploSHIC/diploSHIC.py fvecVcf diploid 1000Genomes/vcfs/${population}/chr${chromosome}.phase3.genotypes.recode.vcf $chromosome $chrLength humanSpecificSites/${region}/${population}FvecsChr${chromosome}/${i}_from_${segStart}_to_${segEnd}.fvec --numSubWins $numSubWins --segmentStart ${segStart} --segmentEnd ${segEnd} --winSize $bigWinSize
 
 # if there were 0 unmasked snps, remove the file
 j=$(wc -l < humanSpecificSites/${region}/${population}FvecsChr${chromosome}/${i}_from_${segStart}_to_${segEnd}.fvec)
