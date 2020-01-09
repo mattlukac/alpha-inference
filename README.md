@@ -71,7 +71,13 @@ To finish the training step, we should `rsync` the ceu model directory back to t
 `rsync -avzhe ssh models/ceu/ mlukac@talapas-login.uoregon.edu:/projects/kernlab/mlukac/alpha-infer/pipeline/models/`
 
 ## Predictions
-Finally we need to download the data we will predict on. 
+Finally we need to download the data we will predict on. Suppose we are interested in inferring selection on the first chromosome in ceu.
+We can find the appropriate vcf file in `pipeline/1000Genomes/vcfs/ceu/`. 
+In case it is not there, simply run the bash file in the `vcfs/` directory like so:
+
+`bash get_sample.bash ceu 1`
+
 We will use `diploSHIC` again to compute the feature vectors, clean the data as before, and predict on windows centered at
 evenly spaced (wrt ordered list) variant sites.
 
+``
