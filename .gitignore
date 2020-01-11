@@ -6,3 +6,4 @@ sims/*/
 scripts/clinEff
 scripts/snpEff
 models/
+pipeline/3-send_data2deep.bash
