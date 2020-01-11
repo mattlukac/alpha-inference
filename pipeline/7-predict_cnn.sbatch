@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --account=kernlab
-#SBATCH --partition=kern
+#SBATCH --partition=c4140
 #SBATCH --nodes=1
 #SBATCH	--job-name=predict
 #SBATCH --time 1:00:00
@@ -14,8 +14,9 @@
 module load cuda/9.0
 module load python3
 
-category=$1
-trainingPop=$2
-predPop=$3
+trainingPop=$1
+region=$2
+chromosome=$3
+predPop=$4
 
-python3 predict_cnn.py $category $trainingPop $predPop
+python3 predict_cnn.py $trainingPop $region $chromosome $predPop
