@@ -1,18 +1,21 @@
 import numpy as np
 import os
 from sklearn.model_selection import train_test_split
-from keras import models, layers, optimizers, callbacks
+from tensorflow.contrib.keras import models, layers, optimizers, callbacks
 import h5py
 import pickle
 import matplotlib.pyplot as plt
+import sys
 
-to_data = '/data0/mlukac/ceu'
+pop = sys.argv[1]
+
+training_data = '../sims/' + pop + '/trainingData/'
 
 # load data
-x = np.load(to_data + 'fvecs.npy')
-y = np.load(to_data + 'targets.npy')
-logCenter = np.load(to_data + 'center.npy')
-logScale = np.load(to_data + 'scale.npy')
+x = np.load(training_data + 'fvecs.npy')
+y = np.load(training_data + 'targets.npy')
+logCenter = np.load(training_data + 'center.npy')
+logScale = np.load(training_data + 'scale.npy')
 
 # untransform predicted data
 def exp_transform(logZ):
@@ -48,7 +51,7 @@ def plotFit(x,y):
     y_min, y_max = (x_min, x_max)
     ax[1].plot([x_min, x_max], [y_min, y_max])
 
-    fig.savefig(to_data + 'ceu_fit.png')
+    fig.savefig(training_data + pop + '_fit.png')
 
 
 # split into train, validation, and test sets
@@ -80,7 +83,7 @@ model.add(layers.Dense(2, name='dense_4'))
 model.compile(optimizer=optimizers.Adam(lr=0.00001), loss='mse', metrics=[])
 
 # train and save model/history
-checkpoint = callbacks.ModelCheckpoint(to_data + 'ceu_demog_logmodel', 
+checkpoint = callbacks.ModelCheckpoint(training_data + pop + '_demog_logmodel', 
                                        monitor='val_loss',
                                        save_best_only=True, 
                                        save_weights_only=False, 
@@ -92,7 +95,7 @@ history = model.fit(x_train, y_train,
                     epochs=30, batch_size=50,
                     callbacks=[checkpoint])
 
-with open(to_data + "ceu_demog_history", 'wb') as my_pickle:
+with open(training_data + pop + "_demog_history", 'wb') as my_pickle:
     pickle.dump(history.history, my_pickle)
 
 # save training plot
@@ -102,7 +105,7 @@ plt.title('model loss')
 plt.ylabel('loss')
 plt.xlabel('epoch')
 plt.legend(['train', 'validation'], loc='upper right')
-plt.savefig(to_data + 'ceu_loss.png')
+plt.savefig(training_data + pop + '_loss.png')
 
 # save fit plot
 plotFit(x_test, y_test)
