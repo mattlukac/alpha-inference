@@ -61,26 +61,27 @@ x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size = 
 # define model
 model = models.Sequential()
 
-model.add(layers.Conv2D(256, 6, activation='relu', padding='same', name='conv2d_1',
+model.add(layers.Conv2D(256, (4,6), activation='relu', padding='same', name='conv2d_1',
                         input_shape=x_train.shape[1:]))
-model.add(layers.Dropout(0.3, name='dropout_1'))
-model.add(layers.Conv2D(512, 2, activation='relu', padding='same', name='conv2d_2'))
+model.add(layers.Dropout(0.2, name='dropout_1'))
+model.add(layers.Conv2D(128, (6,4), activation='relu', padding='same', name='conv2d_2'))
 model.add(layers.MaxPooling2D(2, name='maxpool2d_1'))
-model.add(layers.Conv2D(1024, 3, activation='relu', padding='same', name='conv2d_3'))
-model.add(layers.Dropout(0.3, name='dropout_2'))
-model.add(layers.Conv2D(2048, 3, activation='relu', padding='same', name='conv2d_4'))
+model.add(layers.Conv2D(128, (3,6), activation='relu', name='conv2d_3'))
+model.add(layers.Dropout(0.2, name='dropout_2'))
+model.add(layers.Conv2D(64, (2,3), activation='relu', name='conv2d_4'))
 model.add(layers.MaxPooling2D(2, name='maxpool2d_2'))
 #model.add(layers.Conv2D(4096, 2, activation='relu', padding='same', name='conv2d_5'))
 #model.add(layers.Dropout(0.3, name='dropout_3'))
-model.add(layers.Flatten(name='flatten_1'))
-#model.add(layers.Dense(4096, name='dense_1'))
-#model.add(layers.Dropout(0.5, name='dropout_4'))
-model.add(layers.Dense(2048, name='dense_2'))
+model.add(layers.Flatten(name='flatten'))
+model.add(layers.Dense(128, name='dense_1'))
+model.add(layers.Dropout(0.4, name='dropout_4'))
+model.add(layers.Dense(64, name='dense_2'))
 model.add(layers.Dropout(0.3, name='dropout_5'))
-model.add(layers.Dense(256, name='dense_3'))
+model.add(layers.Dense(32, name='dense_3'))
+model.add(layers.Dropout(0.3, name='dropout_6'))
 model.add(layers.Dense(2, name='dense_4'))
     
-model.compile(optimizer=optimizers.Adam(lr=0.00001), loss='mse', metrics=[])
+model.compile(optimizer=optimizers.Adam(lr=0.0001), loss='mse', metrics=[])
 
 # train and save model/history
 checkpoint = callbacks.ModelCheckpoint(training_data + pop + '_demog_logmodel', 
@@ -92,7 +93,7 @@ checkpoint = callbacks.ModelCheckpoint(training_data + pop + '_demog_logmodel',
 
 history = model.fit(x_train, y_train, 
                     validation_data=[x_val, y_val],
-                    epochs=30, batch_size=50,
+                    epochs=40, batch_size=100,
                     callbacks=[checkpoint])
 
 with open(training_data + pop + "_demog_history", 'wb') as my_pickle:
