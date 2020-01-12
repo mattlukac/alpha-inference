@@ -4,6 +4,8 @@ from sklearn.model_selection import train_test_split
 from tensorflow.contrib.keras import models, layers, optimizers, callbacks
 import h5py
 import pickle
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import sys
 
@@ -12,7 +14,7 @@ pop = sys.argv[1]
 training_data = '../sims/' + pop + '/trainingData/'
 
 # load data
-x = np.load(training_data + 'fvecs.npy')
+x = np.load(training_data + 'smolFvecs.npy')
 y = np.load(training_data + 'targets.npy')
 logCenter = np.load(training_data + 'center.npy')
 logScale = np.load(training_data + 'scale.npy')
@@ -84,7 +86,7 @@ model.add(layers.Dense(2, name='dense_4'))
 model.compile(optimizer=optimizers.Adam(lr=0.0001), loss='mse', metrics=[])
 
 # train and save model/history
-checkpoint = callbacks.ModelCheckpoint(training_data + pop + '_demog_logmodel', 
+checkpoint = callbacks.ModelCheckpoint(training_data + pop + '_demog_logmodel_tf', 
                                        monitor='val_loss',
                                        save_best_only=True, 
                                        save_weights_only=False, 
@@ -96,7 +98,7 @@ history = model.fit(x_train, y_train,
                     epochs=40, batch_size=100,
                     callbacks=[checkpoint])
 
-with open(training_data + pop + "_demog_history", 'wb') as my_pickle:
+with open(training_data + pop + "_demog_history_tf", 'wb') as my_pickle:
     pickle.dump(history.history, my_pickle)
 
 # save training plot
