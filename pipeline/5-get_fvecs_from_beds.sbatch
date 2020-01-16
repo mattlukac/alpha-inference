@@ -9,7 +9,7 @@
 #SBATCH --cpus-per-task=1
 #SBATCH	--mail-type=ALL
 #SBATCH	--mail-user=mlukac@uoregon.edu
-#SBATCH --array=5-1000%60
+#SBATCH --array=1-1000%30
 
 # this batch script uses diploshic to compute feature vectors
 # within evenly space human specific sites that is generated from the previous script
