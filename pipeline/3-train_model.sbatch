@@ -14,6 +14,13 @@
 module load cuda/9.0
 module load python3
 
-trainingPop=$1
+pop=$1
 
-python3 train_model.py $trainingPop
+# train model
+python3 train_model.py $pop > ../models/${pop}/training.log
+
+# move trained model, history, center and scale to models directory
+for filename in ${pop}_demog_logmodel ${pop}_demog_history center.npy scale.npy; do
+  cp ../sims/${pop}/trainingData/${filename} ../models/${pop}/
+done
+
