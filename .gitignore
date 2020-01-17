@@ -6,5 +6,5 @@ sims/*/
 scripts/clinEff
 scripts/snpEff
 models/*/
-!models/ceu/
+#!models/ceu/
 pipeline/3-send_data2deep.bash
