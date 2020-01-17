@@ -17,6 +17,8 @@ predPop = sys.argv[4]
 to_fvecs = 'humanSpecificSites/' + region + '/' + predPop + 'FvecsChr' + chromosome + '/'
 to_model = '../models/' + trainingPop + '/'
 
+# partition feature vectors into the windows
+# and the actual feature vectors
 def trim_fvecs(fvecs):
     n = fvecs.values.shape[0]
     indices = [i for i in range(n)]
@@ -25,11 +27,15 @@ def trim_fvecs(fvecs):
     fvecs = fvecs[:,4:]
     return fvecs, fvec_wins, indices
 
+# undo the logarithm transform from training
 def exp_transform(logz):
     log_mean = np.load(to_model + 'center.npy')
     log_sd = np.load(to_model + 'scale.npy')
     return np.exp(log_sd*logz + log_mean)
 
+# take nSamples number of samples from computed feature vectors
+# and predict center and scale of the Gamma distribution for each
+# then plot the replicated predictions as a histogram
 def plotInferredDistr(nSamples, fvecs, indices, region='synonymous'):
     preds = []
     x = np.zeros((nSamples,12,25,200))
