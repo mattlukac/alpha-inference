@@ -5,6 +5,6 @@ pipeline/slurm*
 sims/*/
 scripts/clinEff
 scripts/snpEff
-models/*
+models/*/
 !models/ceu/
 pipeline/3-send_data2deep.bash
