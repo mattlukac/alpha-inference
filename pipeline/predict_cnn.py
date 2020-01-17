@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 from tensorflow.contrib.keras import models
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 plt.rcParams.update({'font.size': 22})
 import sys
@@ -24,8 +26,8 @@ def trim_fvecs(fvecs):
     return fvecs, fvec_wins, indices
 
 def exp_transform(logz):
-    log_mean = np.load(to_model + 'log_mean.npy')
-    log_sd = np.load(to_model + 'log_stdev.npy')
+    log_mean = np.load(to_model + 'center.npy')
+    log_sd = np.load(to_model + 'scale.npy')
     return np.exp(log_sd*logz + log_mean)
 
 def plotInferredDistr(nSamples, fvecs, indices, region='synonymous'):
@@ -51,7 +53,7 @@ def plotInferredDistr(nSamples, fvecs, indices, region='synonymous'):
     ax[1].axvline(y_pred_mean[1], linestyle='dashed', linewidth=2)
     ax[1].set_xlabel('Inferred alpha standard deviation', fontsize=20)
     
-    fig.savefig(to_model + predPop + 'Predictions/' + region + '_distr.png')
+    fig.savefig(to_model + predPop + 'Predictions/' + region + '_chr' + chromosome + '_distr.png')
 
 def inferDistr(region):
     fvecs = pd.read_csv(to_fvecs + 'all_' + region + '.tsv', sep='\t')
