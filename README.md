@@ -55,29 +55,48 @@ to be passed into our neural net. This is done with
 which will save the training data as numpy arrays, stored the `sims/ceu/trainingData/` directory.
 
 ## Train CNN
-We are now ready to train our network using `deep.uoregon.edu`.
-To send the training data over to deep's `/data0/mlukac/ceu/` directory, we run
+We are now ready to train our neural net.
+Since we have the training data ready, we simply run
 
-`bash 3-send_data2deep.bash ceu`
-
-Now we simply need to navigate to `/home/mlukac/alpha-infer/` and run
-
-`python train_logmodel.py ceu`
+`sbatch 3-train_model.sbatch ceu`
 
 After training is complete, the model, model history, as well as the loss and fit plots
-will all be stored in `/home/mlukac/alpha-infer/models/ceu/`.
-To finish the training step, we should `rsync` the ceu model directory back to talapas:
-
-`rsync -avzhe ssh models/ceu/ mlukac@talapas-login.uoregon.edu:/projects/kernlab/mlukac/alpha-infer/pipeline/models/`
+will all be stored in `models/ceu/`.
 
 ## Predictions
 Finally we need to download the data we will predict on. Suppose we are interested in inferring selection on the first chromosome in ceu.
 We can find the appropriate vcf file in `pipeline/1000Genomes/vcfs/ceu/`. 
 In case it is not there, simply run the bash file in the `vcfs/` directory like so:
 
-`bash get_sample.bash ceu 1`
+`sbatch get_sample.sbatch ceu 1`
 
 We will use `diploSHIC` again to compute the feature vectors, clean the data as before, and predict on windows centered at
 evenly spaced (wrt ordered list) variant sites.
+Say we want to infer the distribution of alpha on synonymous sites in the first chromosome.
+This is done with the following:
 
-``
+`sbatch 5-get_fvecs_from_beds.sbatch ceu synonymous 1`
+
+followed with 
+
+`sbatch 6-clean_fvecs.bash ceu synonymous 1`
+
+This will prep the feature vectors to be fed into our trained network.
+The pipeline allows prediction on populations that the model was not trained on
+in order to assess model misspecification. 
+To that end, when predicting, the fourth input is the name of the predicted population
+while the first is the trained population.
+Running
+
+`sbatch 7-predict_cnn.sbatch ceu synonymous 1 ceu`
+
+will use the ceu model to predict on the ceu data. 
+
+The prediction works as follows: suppose there were n channels the model was trained on
+(recall each channel is a random draw from a Gamma distribution).
+Then we take a random sample of size n from all computed feature vectors
+and predict the Gamma mean and standard deviation from them.
+This is repeated 1000 times and all predictions are plotted has a histogram.
+The plots are found in `models/ceu/ceuPredictions`.
+If we instead used the ceu model to predict on jpt the plots will be found in `models/ceu/jptPredictions`.
+
