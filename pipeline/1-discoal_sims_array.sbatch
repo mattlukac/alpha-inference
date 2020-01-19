@@ -9,7 +9,7 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=mlukac@uoregon.edu
-#SBATCH --array=1-2000%20
+#SBATCH --array=2001-4000%25
 
 module load diploshic
 
