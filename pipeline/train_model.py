@@ -15,7 +15,7 @@ numChannels = sys.argv[2]
 training_data = '../sims/' + pop + '/trainingData/'
 
 # load data
-x = np.load(training_data + 'smolFvecs.npy')
+x = np.load(training_data + 'fvecs.npy')
 x = x[:,:,:,0:numChannels]
 y = np.load(training_data + 'targets.npy')
 logCenter = np.load(training_data + 'center.npy')
