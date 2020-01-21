@@ -5,7 +5,7 @@ shapeMin=0.3
 shapeMax=8.0
 scaleMin=50
 scaleMax=1000
-numChannels=300
+numChannels=200
 numBootChannels=200
 numBootSamples=50
 
