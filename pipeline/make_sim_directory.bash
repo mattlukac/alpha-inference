@@ -10,7 +10,7 @@ for name in alpha discout fvecs params trainingData; do
 
   # make discout subdirectories
   if [ ${name} == discout ]; then
-    for k in $(seq 1 3000); do
+    for k in $(seq 1 5000); do
       mkdir $toSims$name'/discout'$k
     done
   fi
