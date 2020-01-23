@@ -1,4 +1,4 @@
-# this batch file uses the great apes diversity data
+# this file uses the great apes diversity data
 # in order to identify human specific fixations
 # and creates a bed file with windows centered on the fixations
 # with window size given in config.txt
