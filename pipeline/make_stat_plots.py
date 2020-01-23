@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sys
 
+### TO BE RUN AFTER CLEANING FVECS WITH 2-clean_fvecs.sbatch
+
 # initialize directory and read tensor shape parameters
 pop = sys.argv[1] + '/'
 to_sims = '/projects/kernlab/mlukac/alpha-infer/sims/' + pop
