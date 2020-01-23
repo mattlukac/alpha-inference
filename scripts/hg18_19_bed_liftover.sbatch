@@ -10,4 +10,4 @@
 #SBATCH	--mail-type=ALL
 #SBATCH	--mail-user=mlukac@uoregon.edu
 
-../data/lift_files/liftOver ../data/human_specific_sites/hspec.bed ../data/lift_files/hg18ToHg19.over.chain.gz ../data/human_specific_sites/hspec_hg19.bed ../data/human_specific_sites/hspec_unlifted.bed
+../data/lift_files/liftOver ../data/human_specific_sites/hspec_18.bed ../data/lift_files/hg18ToHg19.over.chain.gz ../data/human_specific_sites/hspec_hg19.bed ../data/human_specific_sites/hspec_unlifted.bed
