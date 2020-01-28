@@ -1,10 +1,10 @@
-alphaDraws=300
-bigWinSize=200000
+alphaDraws=200
+bigWinSize=1100000
 numSubWins=25
-shapeMin=0.3
-shapeMax=8.0
-scaleMin=50
-scaleMax=1000
+shapeMin=0.1
+shapeMax=3.0
+scaleMin=500
+scaleMax=4000
 numChannels=200
 numBootChannels=200
 numBootSamples=2
