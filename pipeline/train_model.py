@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import sys
 
 pop = sys.argv[1]
-numChannels = sys.argv[2]
+numChannels = int(sys.argv[2])
 
 training_data = '../sims/' + pop + '/trainingData/'
 
