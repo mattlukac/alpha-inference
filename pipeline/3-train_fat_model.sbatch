@@ -20,8 +20,18 @@ source config.txt
 # train model
 python3 train_fat_model.py $pop $numChannels > ../models/${pop}/training.log
 
-# move trained model, history, center and scale to models directory
-for filename in ${pop}_demog_logmodel ${pop}_demog_history center.npy scale.npy summary.txt; do
+# move trained model, history, center, scale and fit plots to models directory
+files=( 
+	${pop}_demog_logmodel
+        ${pop}_demog_history 
+	center.npy 
+	scale.npy 
+	summary.txt 
+	${pop}_loss.png 
+	${pop}_fit.png 
+      )
+for filename in "${files[@]}"
+do
   cp ../sims/${pop}/trainingData/${filename} ../models/${pop}/
 done
 
