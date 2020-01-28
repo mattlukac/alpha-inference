@@ -3,13 +3,13 @@
 #SBATCH --partition=kern
 #SBATCH --nodes=1
 #SBATCH --job-name=sims
-#SBATCH --time=3:00:00
-#SBATCH --mem-per-cpu=50G
+#SBATCH --time=4:00:00
+#SBATCH --mem-per-cpu=100G
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=mlukac@uoregon.edu
-#SBATCH --array=3-1000%40
+#SBATCH --array=1-3
 
 module load diploshic
 
@@ -44,11 +44,23 @@ echo ${a[@]} > ../sims/${pop}/alpha/alpha_values${j}.tsv
 #initialize feature vector file
 touch ../sims/${pop}/fvecs/new/fvecs${j}.tsv
 
-#for each alpha run discoal, and store output in discout
-#then compute feature vector and append to fvec file
+#make simuulation log file
 export numSubWins
 export bigWinSize
 
+if [ $j == 1 ]
+then
+  echo 'shape min: '$shapeMin > ../sims/${pop}/sim.log
+  echo 'shape max: '$shapeMax >> ../sims/${pop}/sim.log
+  echo 'scale min: '$scaleMin >> ../sims/${pop}/sim.log
+  echo 'scale max: '$scaleMax >> ../sims/${pop}/sim.log
+  echo 'alpha draws: '$alphaDraws >> ../sims/${pop}/sim.log
+  echo 'big window size: '$bigWinSize >> ../sims/${pop}/sim.log
+  echo 'number of subwindows: '$numSubWins >> ../sims/${pop}/sim.log
+fi
+
+#for each alpha run discoal, and store output in discout
+#then compute feature vector and append to fvec file
 for i in `seq 0 $((${alphaDraws}-1))`; do
   eval ${!pop}
   python /projects/kernlab/shared/diploSHIC_snakemake/diploSHIC/diploSHIC.py fvecSim diploid ../sims/${pop}/discout/discout${j}/alpha${i}.msOut ../sims/${pop}/fvecs/temp/alpha${i}_${j}.msOut.diploid.fvec --numSubWins ${numSubWins} --totalPhysLen ${bigWinSize}

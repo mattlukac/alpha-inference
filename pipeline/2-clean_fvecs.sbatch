@@ -19,11 +19,11 @@ module load python3/3.6.7
 
 pop=$1
 trainingSetSize=$(ls ../sims/${pop}/params/* | wc -l)
-dir=../sims/${pop}/fvecs/new/
+newFvecs=../sims/${pop}/fvecs/new/
 
 # if there are new fvecs, move them to parent directory
-if [ "$(ls -A $dir)" ]; then
-  mv $dir/* $dir/../
+if [ "$(ls -A $newFvecs)" ]; then
+  mv $newFvecs/* $newFvecs/../
 fi
 
 source config.txt
