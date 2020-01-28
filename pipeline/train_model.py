@@ -8,6 +8,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import sys
+from contextlib import redirect_stdout
 
 pop = sys.argv[1]
 numChannels = int(sys.argv[2])
@@ -55,7 +56,7 @@ def plotFit(x,y):
     y_min, y_max = (x_min, x_max)
     ax[1].plot([x_min, x_max], [y_min, y_max])
 
-    fig.savefig(training_data + pop + '_fit.png')
+    fig.savefig(training_data + pop + '_fit.png', dpi=1200)
 
 
 # split into train, validation, and test sets
@@ -87,6 +88,11 @@ model.add(layers.Dense(2, name='dense_4'))
     
 model.compile(optimizer=optimizers.Adam(lr=0.0001), loss='mse', metrics=[])
 
+# save model summary
+with open(training_data + 'summary.txt', 'w') as f:
+    with redirect_stdout(f):
+        model.summary()
+
 # train and save model/history
 checkpoint = callbacks.ModelCheckpoint(training_data + pop + '_demog_logmodel', 
                                        monitor='val_loss',
@@ -97,7 +103,7 @@ checkpoint = callbacks.ModelCheckpoint(training_data + pop + '_demog_logmodel',
 
 history = model.fit(x_train, y_train, 
                     validation_data=[x_val, y_val],
-                    epochs=40, batch_size=100,
+                    epochs=300, batch_size=2000,
                     callbacks=[checkpoint])
 
 with open(training_data + pop + "_demog_history", 'wb') as my_pickle:
@@ -110,7 +116,7 @@ plt.title('model loss')
 plt.ylabel('loss')
 plt.xlabel('epoch')
 plt.legend(['train', 'validation'], loc='upper right')
-plt.savefig(training_data + pop + '_loss.png')
+plt.savefig(training_data + pop + '_loss.png', dpi=1200)
 
 # save fit plot
 plotFit(x_test, y_test)
