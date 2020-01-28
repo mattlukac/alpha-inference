@@ -7,7 +7,7 @@
 #SBATCH --mem-per-cpu=24G
 #SBATCH	--ntasks=1
 #SBATCH --cpus-per-task=1
-#SBATCH	--mail-type=ALL
+#SBATCH	--mail-type=END
 #SBATCH	--mail-user=mlukac@uoregon.edu
 #SBATCH --gres=gpu:1
 
@@ -33,6 +33,5 @@ done
 # - scale range
 
 about=../models/${pop}/about.txt
-touch $about
-echo 'input size: ('12', '$numSubWins', '$numChannels')' >> $about
+echo 'input size: ('12', '$numSubWins', '$numChannels')' > $about
 echo 'window size: '$bigWinSize >> $about
