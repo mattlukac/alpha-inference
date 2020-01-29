@@ -2,7 +2,7 @@
 #SBATCH --account=kernlab
 #SBATCH --partition=kern
 #SBATCH --nodes=1
-#SBATCH --job-name=discoal_sim
+#SBATCH --job-name=sim
 #SBATCH --time=3:00:00
 #SBATCH --mem-per-cpu=50G
 #SBATCH --ntasks=1
