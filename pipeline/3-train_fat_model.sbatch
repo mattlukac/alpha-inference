@@ -18,17 +18,13 @@ pop=$1
 source config.txt
 
 # train model
-python3 train_fat_model.py $pop $numChannels > ../models/${pop}/training.log
+python3 train_fat_model.py $pop $numChannels > ../models/${pop}/new/training.log
 
 # move trained model, history, center, scale and fit plots to models directory
 files=( 
-	${pop}_demog_logmodel
-        ${pop}_demog_history 
 	center.npy 
 	scale.npy 
 	summary.txt 
-	${pop}_loss.png 
-	${pop}_fit.png 
       )
 for filename in "${files[@]}"
 do
@@ -41,7 +37,11 @@ done
 # - training set size
 # - shape range
 # - scale range
+# - model code
 
-about=../models/${pop}/about.txt
+about=../models/${pop}/new/about.txt
+trainingSetSize=$(ls ../sims/${pop}/params/* | wc -l)
 echo 'input size: ('12', '$numSubWins', '$numChannels')' > $about
 echo 'window size: '$bigWinSize >> $about
+echo 'training set size: '$trainingSetSize >> $about
+head -n 108 train_fat_model.py | tail -n 43 >> $about
