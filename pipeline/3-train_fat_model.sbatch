@@ -31,17 +31,11 @@ do
   cp ../sims/${pop}/trainingData/${filename} ../models/${pop}/
 done
 
-# create log file with model parameters with:
-# - input size
-# - window size
-# - training set size
-# - shape range
-# - scale range
-# - model code
-
+# create log file for the model
 about=../models/${pop}/new/about.txt
 trainingSetSize=$(ls ../sims/${pop}/params/* | wc -l)
-echo 'input size: ('12', '$numSubWins', '$numChannels')' > $about
-echo 'window size: '$bigWinSize >> $about
+
+cp ../sims/${pop}/sim.log $about
+echo 'input size: ('12', '$numSubWins', '$numChannels')' >> $about
 echo 'training set size: '$trainingSetSize >> $about
 head -n 108 train_fat_model.py | tail -n 43 >> $about
