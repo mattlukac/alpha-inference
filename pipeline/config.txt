@@ -1,12 +1,12 @@
-alphaDraws=500
+alphaDraws=300
 bigWinSize=200000
 numSubWins=25
 shapeMin=0.3
 shapeMax=8
 scaleMin=50
 scaleMax=1000
-numChannels=500
-numBootChannels=500
+numChannels=300
+numBootChannels=200
 numBootSamples=2
 
 # b37 chromosome lengths
