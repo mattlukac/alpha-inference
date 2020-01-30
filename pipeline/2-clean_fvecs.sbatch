@@ -15,9 +15,12 @@
 # and saves them with the center and scale constants 
 # in order to set up training the model
 
+# To request bootstrapping provide a second argument
+
 module load python3/3.6.7
 
 pop=$1
+boot=${2:-noBoot}
 trainingSetSize=$(ls ../sims/${pop}/params/* | wc -l)
 newFvecs=../sims/${pop}/fvecs/new/
 
@@ -28,7 +31,13 @@ fi
 
 source config.txt
 export numChannels
-export numBootChannels
-export numBootSamples
 
-python3 save_training_data.py $pop $trainingSetSize
+# do bootstrap or nah
+if [ $boot != noBoot ]
+then
+  export numBootChannels
+  export numBootSamples
+  python3 save_training_data_with_boot.py $pop $trainingSetSize
+else
+  python3 save_training_data.py $pop $trainingSetSize
+fi
