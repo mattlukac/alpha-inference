@@ -34,7 +34,6 @@ then
   scaleNum=1100000
 fi
 
-source config.txt
 
 # get number of lines in bed file
 bedFile=humanSpecificSites/${region}/${scale}/chr${chromosome}_windows_hspec.bed
@@ -51,6 +50,7 @@ segStart=$(head -n ${line} ${bedFile} | tail -n 1 | awk '{print $2}')
 segEnd=$(head -n ${line} ${bedFile} | tail -n 1 | awk '{print $3}')
 
 # get chromosome length from config.txt
+source config.txt # to get chromosome lengths
 chrLengthName=chr${chromosome}Length
 chrLength=${!chrLengthName}
 
