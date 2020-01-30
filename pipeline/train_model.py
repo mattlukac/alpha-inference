@@ -41,7 +41,7 @@ def plotFit(x,y):
     test_stdev = y_test_transform[:,1]
 
     #now plot them side by side
-    fig, ax = plt.subplots(1,2)
+    fig, ax = plt.subplots(1,2, figsize=(12,6))
 
     ax[0].scatter(test_mean, pred_mean)
     ax[0].set_xlabel("True mean")
@@ -104,7 +104,7 @@ checkpoint = callbacks.ModelCheckpoint(to_model + pop + '_demog_logmodel',
 
 history = model.fit(x_train, y_train, 
                     validation_data=[x_val, y_val],
-                    epochs=200, batch_size=1000,
+                    epochs=200, batch_size=3000,
                     callbacks=[checkpoint])
 
 with open(to_model + pop + "_demog_history", 'wb') as my_pickle:
