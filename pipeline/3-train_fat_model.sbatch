@@ -36,7 +36,7 @@ done
 about=../models/${pop}/new/about.txt
 trainingSetSize=$(ls ../sims/${pop}/params/* | wc -l)
 
-cp ../sims/${pop}/sim.log $about
+cat ../sims/${pop}/sim.log > $about
 echo 'input size: ('12', '$numSubWins', '$numChannels')' >> $about
 echo 'training set size: '$trainingSetSize >> $about
 head -n 108 train_fat_model.py | tail -n 43 >> $about
