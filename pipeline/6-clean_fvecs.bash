@@ -7,7 +7,8 @@ chromosome=$3
 direc=humanSpecificSites/${region}/${population}FvecsChr${chromosome}
 
 # make extraLine/ directory if it doesn't exist
-if [ ! -d "${direc}/extraLine/" ]; then
+if [ ! -d "${direc}/extraLine/" ]
+then
   mkdir ${direc}/extraLine
 fi
 
