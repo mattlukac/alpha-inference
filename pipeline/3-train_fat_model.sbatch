@@ -43,4 +43,3 @@ head -n 108 train_fat_model.py | tail -n 43 >> $about
 
 # train model
 python3 train_fat_model.py $pop $numChannels > ../models/${pop}/new/training.log
-cp ../sims/${pop}/trainingData/summary.txt ../models/${pop}/new/
