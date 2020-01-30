@@ -1,12 +1,14 @@
 #!/bin/bash
 
-pop=$1
-backup=${2:-retain}
+scale=$1
 
-if [ $backup != retain ]
+if [ $scale == 200kb ]
 then
-  mkdir ${pop}Backup
-else
-  mkdir $pop
+  scaleNum=200000
+  echo $scaleNum
+elif [ $scale == 1.1Mb ]
+then
+  scaleNum=1100000
+  echo $scaleNum
 fi
 
