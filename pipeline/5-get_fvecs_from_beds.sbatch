@@ -12,40 +12,55 @@
 #SBATCH --array=1-1000%30
 
 # this batch script uses diploshic to compute feature vectors
-# within evenly space human specific sites that is generated from the previous script
+# within evenly space human specific sites at the prescribed genomic region
 
 module load diploshic
 
 # input parameters
 population=$1
 region=$2
-chromosome=$3
+scale=$3 # either 200kb or 1.1Mb
+chromosome=$4
 
-# get chromosome length from config.txt
+i=${SLURM_ARRAY_TASK_ID} # fvec index
+slurmArraySize=1000 # number of fvecs per region in chromosome
+
+# assing numeric scale variable
+if [ $scale == 200kb ]
+then
+  scaleNum=200000
+elif [ $scale == 1.1Mb ]
+then
+  scaleNum=1100000
+fi
+
 source config.txt
-chrLengthName=chr${chromosome}Length
-chrLength=${!chrLengthName}
 
 # get number of lines in bed file
-bedFile=humanSpecificSites/${region}/chr2_${region}_windows_hspec.bed
+bedFile=humanSpecificSites/${region}/${scale}/chr${chromosome}_windows_hspec.bed
 nLines=$(wc -l < ${bedFile})
 
-# round down to nearest multiple of 1000 and
-# get step size for 1000 evenly spaced winows
-nLinesMod=$((${nLines} % 1000))
-stepSize=$(((${nLines} - ${nLinesMod})/1000))
+# round down to nearest multiple of slurmArraySize and
+# get step size for slurmArraySize evenly spaced windows
+nLinesMod=$((${nLines} % $slurmArraySize))
+stepSize=$(((${nLines} - ${nLinesMod})/$slurmArraySize))
 
 # for step i get segStart and segEnd
-i=${SLURM_ARRAY_TASK_ID}
 line=$((${stepSize} * $i))
 segStart=$(head -n ${line} ${bedFile} | tail -n 1 | awk '{print $2}')
 segEnd=$(head -n ${line} ${bedFile} | tail -n 1 | awk '{print $3}')
 
+# get chromosome length from config.txt
+chrLengthName=chr${chromosome}Length
+chrLength=${!chrLengthName}
+
 # now compute feature vectors for the desired window
-python /projects/kernlab/shared/diploSHIC_snakemake/diploSHIC/diploSHIC.py fvecVcf diploid 1000Genomes/vcfs/${population}/chr${chromosome}.phase3.genotypes.recode.vcf $chromosome $chrLength humanSpecificSites/${region}/${population}FvecsChr${chromosome}/${i}_from_${segStart}_to_${segEnd}.fvec --numSubWins $numSubWins --segmentStart ${segStart} --segmentEnd ${segEnd} --winSize $bigWinSize
+outFile=1000Genomes/fvecs/${population}/${region}/${scale}/chr${chromosome}/${i}_from_${segStart}_to_${segEnd}.fvec
+python /projects/kernlab/shared/diploSHIC_snakemake/diploSHIC/diploSHIC.py fvecVcf diploid 1000Genomes/vcfs/${population}/chr${chromosome}.phase3.genotypes.recode.vcf $chromosome $chrLength $outFile --numSubWins $numSubWins --segmentStart ${segStart} --segmentEnd ${segEnd} --winSize $scaleNum
 
 # if there were 0 unmasked snps, remove the file
-j=$(wc -l < humanSpecificSites/${region}/${population}FvecsChr${chromosome}/${i}_from_${segStart}_to_${segEnd}.fvec)
-if [ $j == 1 ]; then
-  rm humanSpecificSites/${region}/${population}FvecsChr${chromosome}/${i}_from_${segStart}_to_${segEnd}.fvec
+j=$(wc -l < $outFile)
+if [ $j == 1 ] 
+then
+  rm $outFile
 fi 
