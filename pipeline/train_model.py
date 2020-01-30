@@ -13,7 +13,8 @@ from contextlib import redirect_stdout
 pop = sys.argv[1]
 numChannels = int(sys.argv[2])
 
-training_data = '../sims/' + pop + '/trainingData/'
+training_data = '../sims/' + pop + '/trainingData/' #for loading
+to_model = '../models/' + pop + '/new/' #for saving
 
 # load data
 x = np.load(training_data + 'fvecs.npy')
@@ -40,7 +41,7 @@ def plotFit(x,y):
     test_stdev = y_test_transform[:,1]
 
     #now plot them side by side
-    fig, ax = plt.subplots(1,2, figsize=(18,7))
+    fig, ax = plt.subplots(1,2)
 
     ax[0].scatter(test_mean, pred_mean)
     ax[0].set_xlabel("True mean")
@@ -56,7 +57,7 @@ def plotFit(x,y):
     y_min, y_max = (x_min, x_max)
     ax[1].plot([x_min, x_max], [y_min, y_max])
 
-    fig.savefig(training_data + pop + '_fit.png', dpi=1200)
+    fig.savefig(to_model + pop + '_fit.png', dpi=1200)
 
 
 # split into train, validation, and test sets
@@ -89,12 +90,12 @@ model.add(layers.Dense(2, name='dense_4'))
 model.compile(optimizer=optimizers.Adam(lr=0.0001), loss='mse', metrics=[])
 
 # save model summary
-with open(training_data + 'summary.txt', 'w') as f:
+with open(to_model + 'summary.txt', 'w') as f:
     with redirect_stdout(f):
         model.summary()
 
 # train and save model/history
-checkpoint = callbacks.ModelCheckpoint(training_data + pop + '_demog_logmodel', 
+checkpoint = callbacks.ModelCheckpoint(to_model + pop + '_demog_logmodel', 
                                        monitor='val_loss',
                                        save_best_only=True, 
                                        save_weights_only=False, 
@@ -106,17 +107,17 @@ history = model.fit(x_train, y_train,
                     epochs=300, batch_size=2000,
                     callbacks=[checkpoint])
 
-with open(training_data + pop + "_demog_history", 'wb') as my_pickle:
+with open(to_model + pop + "_demog_history", 'wb') as my_pickle:
     pickle.dump(history.history, my_pickle)
 
 # save training plot
 plt.plot(history.history['loss'])
 plt.plot(history.history['val_loss'])
-plt.title('model loss')
+plt.title(pop + 'model loss')
 plt.ylabel('loss')
 plt.xlabel('epoch')
 plt.legend(['train', 'validation'], loc='upper right')
-plt.savefig(training_data + pop + '_loss.png', dpi=1200)
+plt.savefig(to_model + pop + '_loss.png', dpi=1200)
 
 # save fit plot
 plotFit(x_test, y_test)

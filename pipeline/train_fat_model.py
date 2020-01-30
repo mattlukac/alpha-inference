@@ -41,7 +41,7 @@ def plotFit(x,y):
     test_stdev = y_test_transform[:,1]
 
     #now plot them side by side
-    fig, ax = plt.subplots(1,2, figsize=(18,7))
+    fig, ax = plt.subplots(1,2)
 
     ax[0].scatter(test_mean, pred_mean)
     ax[0].set_xlabel("True mean")
@@ -67,7 +67,7 @@ x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size = 
 # define model
 model = models.Sequential()
 
-model.add(layers.Conv2D(256, (4,6), activation='relu', padding='same', name='conv2d_1',
+model.add(layers.Conv2D(512, (4,6), activation='relu', padding='same', name='conv2d_1',
                         input_shape=x_train.shape[1:]))
 model.add(layers.Dropout(0.1, name='dropout_1'))
 model.add(layers.Conv2D(512, (6,4), activation='relu', padding='same', name='conv2d_2'))
@@ -87,7 +87,7 @@ model.add(layers.Dense(32, name='dense_3'))
 model.add(layers.Dropout(0.2, name='dropout_6'))
 model.add(layers.Dense(2, name='dense_4'))
     
-model.compile(optimizer=optimizers.Adam(lr=0.00001), loss='mse', metrics=[])
+model.compile(optimizer=optimizers.Adam(lr=0.0001), loss='mse', metrics=[])
 
 # save model summary
 with open(to_model + 'summary.txt', 'w') as f:
@@ -104,7 +104,7 @@ checkpoint = callbacks.ModelCheckpoint(to_model + pop + '_demog_logmodel',
 
 history = model.fit(x_train, y_train, 
                     validation_data=[x_val, y_val],
-                    epochs=200, batch_size=4000,
+                    epochs=100, batch_size=500,
                     callbacks=[checkpoint])
 
 with open(to_model + pop + "_demog_history", 'wb') as my_pickle:
@@ -113,7 +113,7 @@ with open(to_model + pop + "_demog_history", 'wb') as my_pickle:
 # save training plot
 plt.plot(history.history['loss'])
 plt.plot(history.history['val_loss'])
-plt.title('model loss')
+plt.title(pop + 'model loss')
 plt.ylabel('loss')
 plt.xlabel('epoch')
 plt.legend(['train', 'validation'], loc='upper right')
