@@ -3,8 +3,8 @@
 #SBATCH --partition=c4140
 #SBATCH --nodes=1
 #SBATCH	--job-name=train
-#SBATCH --time 1:00:00
-#SBATCH --mem-per-cpu=24G
+#SBATCH --time 2:00:00
+#SBATCH --mem-per-cpu=36G
 #SBATCH	--ntasks=1
 #SBATCH --cpus-per-task=1
 #SBATCH	--mail-type=END
@@ -17,21 +17,30 @@ module load python3
 pop=$1
 source config.txt
 
-# train model
-python3 train_model.py $pop $numChannels > ../models/${pop}/training.log
+# make model directory if it doesn't exist
+if [ ! -d "../models/${pop}/" ]
+then 
+  mkdir ../models/${pop}
+  mkdir ../models/${pop}/new
+  mkdir ../models/${pop}/backups
+fi
 
-# move trained model, history, center and scale to models directory
-for filename in ${pop}_demog_logmodel ${pop}_demog_history center.npy scale.npy; do
+# move center and scale to models directory
+files=( center.npy scale.npy )
+for filename in "${files[@]}"
+do
   cp ../sims/${pop}/trainingData/${filename} ../models/${pop}/
 done
 
-# create log file with model parameters with:
-# - input size
-# - window size
-# - training set size
-# - shape range
-# - scale range
+# create log file for the model
+about=../models/${pop}/new/about.txt
+trainingSetSize=$(ls ../sims/${pop}/params/* | wc -l)
 
-about=../models/${pop}/about.txt
-echo 'input size: ('12', '$numSubWins', '$numChannels')' > $about
-echo 'window size: '$bigWinSize >> $about
+cp ../sims/${pop}/sim.log $about
+echo 'input size: ('12', '$numSubWins', '$numChannels')' >> $about
+echo 'training set size: '$trainingSetSize >> $about
+head -n 108 train_model.py | tail -n 43 >> $about
+
+# train model
+python3 train_model.py $pop $numChannels > ../models/${pop}/new/training.log
+cp ../sims/${pop}/trainingData/summary.txt ../models/${pop}/new/

@@ -4,7 +4,7 @@
 #SBATCH --nodes=1
 #SBATCH	--job-name=train
 #SBATCH --time 2:00:00
-#SBATCH --mem-per-cpu=24G
+#SBATCH --mem-per-cpu=36G
 #SBATCH	--ntasks=1
 #SBATCH --cpus-per-task=1
 #SBATCH	--mail-type=END
@@ -17,12 +17,16 @@ module load python3
 pop=$1
 source config.txt
 
-# move center, scale and summary to models directory
-files=( 
-	center.npy 
-	scale.npy 
-	summary.txt 
-      )
+# make model directory if it doesn't exist
+if [ ! -d "../models/${pop}/" ]
+then 
+  mkdir ../models/${pop}
+  mkdir ../models/${pop}/new
+  mkdir ../models/${pop}/backups
+fi
+
+# move center and scale to models directory
+files=( center.npy scale.npy )
 for filename in "${files[@]}"
 do
   cp ../sims/${pop}/trainingData/${filename} ../models/${pop}/
@@ -39,3 +43,4 @@ head -n 108 train_fat_model.py | tail -n 43 >> $about
 
 # train model
 python3 train_fat_model.py $pop $numChannels > ../models/${pop}/new/training.log
+cp ../sims/${pop}/trainingData/summary.txt ../models/${pop}/new/
