@@ -87,7 +87,7 @@ model.add(layers.Dense(32, name='dense_3'))
 model.add(layers.Dropout(0.3, name='dropout_6'))
 model.add(layers.Dense(2, name='dense_4'))
     
-model.compile(optimizer=optimizers.Adam(lr=0.0001), loss='mse', metrics=[])
+model.compile(optimizer=optimizers.Adam(lr=0.00001), loss='mse', metrics=[])
 
 # save model summary
 with open(to_model + 'summary.txt', 'w') as f:
@@ -104,7 +104,7 @@ checkpoint = callbacks.ModelCheckpoint(to_model + pop + '_demog_logmodel',
 
 history = model.fit(x_train, y_train, 
                     validation_data=[x_val, y_val],
-                    epochs=300, batch_size=2000,
+                    epochs=200, batch_size=1000,
                     callbacks=[checkpoint])
 
 with open(to_model + pop + "_demog_history", 'wb') as my_pickle:
