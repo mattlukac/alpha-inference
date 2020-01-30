@@ -113,7 +113,7 @@ with open(to_model + pop + "_demog_history", 'wb') as my_pickle:
 # save training plot
 plt.plot(history.history['loss'])
 plt.plot(history.history['val_loss'])
-plt.title(pop + 'model loss')
+plt.title(pop + ' model loss')
 plt.ylabel('loss')
 plt.xlabel('epoch')
 plt.legend(['train', 'validation'], loc='upper right')
