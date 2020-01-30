@@ -17,10 +17,7 @@ module load python3
 pop=$1
 source config.txt
 
-# train model
-python3 train_fat_model.py $pop $numChannels > ../models/${pop}/new/training.log
-
-# move trained model, history, center, scale and fit plots to models directory
+# move center, scale and summary to models directory
 files=( 
 	center.npy 
 	scale.npy 
@@ -39,3 +36,6 @@ cp ../sims/${pop}/sim.log $about
 echo 'input size: ('12', '$numSubWins', '$numChannels')' >> $about
 echo 'training set size: '$trainingSetSize >> $about
 head -n 108 train_fat_model.py | tail -n 43 >> $about
+
+# train model
+python3 train_fat_model.py $pop $numChannels > ../models/${pop}/new/training.log
