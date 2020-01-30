@@ -6,7 +6,7 @@ import sys
 
 # initialize directory and read tensor shape parameters
 pop = sys.argv[1] 
-to_data = '/projects/kernlab/mlukac/alpha-infer/sims/' + pop + '/trainingData/'
+to_data = '../models' + pop + '/'
 
 x = np.load(to_data + 'fvecs.npy')
 logY = np.load(to_data + 'targets.npy')
@@ -22,5 +22,5 @@ fig, ax = plt.subplots(12,1, figsize=(10,15))
 for i in range(simMeans.shape[1]):
     for j in range(simMeans.shape[0]):
         ax[i].plot(subWins, simMeans[j,i,:], alpha=0.3, linewidth=means[j]/np.std(means))
-plt.savefig(to_data + pop + 'StatPlot.png')
+plt.savefig(to_data + pop + 'StatPlot.png', dpi=1200)
 
