@@ -4,12 +4,12 @@
 #SBATCH --nodes=1
 #SBATCH --job-name=sims
 #SBATCH --time=6:00:00
-#SBATCH --mem-per-cpu=350G
+#SBATCH --mem-per-cpu=60G
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=mlukac@uoregon.edu
-#SBATCH --array=1-2
+#SBATCH --array=2001-3000%40
 
 module load diploshic
 
@@ -48,15 +48,16 @@ touch ../sims/${pop}/fvecs/new/fvecs${j}.tsv
 export numSubWins
 export bigWinSize
 
-if [ $j == 1 ]
+simlog=../sims/${pop}/sim.log
+if [ ! -f "$simlog" ]
 then
-  echo 'shape min: '$shapeMin > ../sims/${pop}/sim.log
-  echo 'shape max: '$shapeMax >> ../sims/${pop}/sim.log
-  echo 'scale min: '$scaleMin >> ../sims/${pop}/sim.log
-  echo 'scale max: '$scaleMax >> ../sims/${pop}/sim.log
-  echo 'alpha draws: '$alphaDraws >> ../sims/${pop}/sim.log
-  echo 'big window size: '$bigWinSize >> ../sims/${pop}/sim.log
-  echo 'number of subwindows: '$numSubWins >> ../sims/${pop}/sim.log
+  echo 'shape min: '$shapeMin > $simlog
+  echo 'shape max: '$shapeMax >> $simlog
+  echo 'scale min: '$scaleMin >> $simlog
+  echo 'scale max: '$scaleMax >> $simlog
+  echo 'alpha draws: '$alphaDraws >> $simlog
+  echo 'big window size: '$bigWinSize >> $simlog
+  echo 'number of subwindows: '$numSubWins >> $simlog
 fi
 
 #for each alpha run discoal, and store output in discout
