@@ -23,6 +23,7 @@ fig, ax = plt.subplots(12,1, figsize=(10,15))
 for i in range(simMeans.shape[1]):
     for j in range(simMeans.shape[0]):
         ax[i].plot(subWins, simMeans[j,i,:], alpha=0.3, linewidth=means[j]/np.std(means))
-plt.suptitle(pop + ' mean feature vectors', fontsize=16)
+        if i == 0:
+            ax[i].set_title(pop + ' mean feature vectors', fontsize=24)
 plt.savefig(to_model + pop + 'StatPlot.png', dpi=1200)
 
