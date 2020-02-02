@@ -15,29 +15,29 @@
 # and saves them with the center and scale constants 
 # in order to set up training the model
 
-# To request bootstrapping provide a second argument
-
 module load python3/3.6.7
 
+#get population
 pop=$1
-boot=${2:-noBoot}
-trainingSetSize=$(ls ../sims/${pop}/params/* | wc -l)
-newFvecs=../sims/${pop}/fvecs/new/
 
-# if there are new fvecs, move them to parent directory
-if [ "$(ls -A $newFvecs)" ]; then
-  mv $newFvecs/* $newFvecs/../
-fi
-
-source config.txt
-export numChannels
-
-# do bootstrap or nah
-if [ $boot != noBoot ]
+if [ ! -f ../sims/${pop}/fvecs.tsv ]
 then
-  export numBootChannels
-  export numBootSamples
-  python3 save_training_data_with_boot.py $pop $trainingSetSize
-else
-  python3 save_training_data.py $pop $trainingSetSize
+  #concatenate fvecs, alpha values, and params files
+  #save them in sims directory
+  touch ../sims/${pop}/fvecs.tsv
+  touch ../sims/${pop}/params.tsv
+  touch ../sims/${pop}/alpha_values.tsv
+
+  numSims=$(ls ../sims/${pop}/params/* | wc -l)
+  for i in $(seq 1 ${numSims})
+  do
+    cat ../sims/${pop}/fvecs/fvecs${i}.tsv >> ../sims/${pop}/fvecs.tsv
+    cat ../sims/${pop}/params/params${i}.tsv >> ../sims/${pop}/params.tsv
+    cat ../sims/${pop}/alpha/alpha_values${i}.tsv >> ../sims/${pop}/alpha_values.tsv
+  done
 fi
+
+numChannels=$(head -n 1 ../sims/${pop}/alpha_values.tsv | wc -w)
+rho=$(grep $pop populations.txt | cut -f 9 -d ' ')
+
+python3 save_training_data.py $pop $numChannels $rho

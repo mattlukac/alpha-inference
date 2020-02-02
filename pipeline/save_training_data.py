@@ -1,61 +1,55 @@
 import numpy as np
-import pandas as pd
-import os
+import pandas as pd 
 import sys
 
-#####
-## Here we save several numpy arrays for training the CNN.
-## We have:
-##   x      all training tensors
-##   y      the targets, as (mean, std) of gamma distribution
-##   smol*  data filtered so mean < 3000
-##   log*   log transformed center and scale to standardize targets
-######
+pop = sys.argv[1]
+numChannels = int(sys.argv[2])
+rho = float(sys.argv[3]) #ninth field in populations.txt
 
-# initialize directory and read tensor shape parameters
-pop = sys.argv[1] + '/'
-numTensors = int(sys.argv[2])
-to_sims = '/projects/kernlab/mlukac/alpha-infer/sims/' + pop
-numChannels = int(os.environ['numChannels'])
+to_data = '../sims/' + pop + '/'
+to_training_data = to_data + 'trainingData/'
 
-# initialize tensors to be saved
-x = np.zeros((numTensors, 12, 25, numChannels))
+# load data
+fvecs = pd.read_csv(to_data + 'fvecs.tsv', header=None, sep='\t')
+params = pd.read_csv(to_data + 'params.tsv', header=None, sep='\t')
+alpha_values = pd.read_csv(to_data + 'alpha_values.tsv', header=None, sep=' ')
 
-# for each file, read feature vector and parameters into x and params, respectively
-params = np.zeros((numTensors, 2))
-for i in range(numTensors):
-    fv = pd.read_csv(to_sims + 'fvecs/fvecs' + str(i+1) + '.tsv', header=None, sep='\t').values
-    for j in range(numChannels):
-        x[i,:,:,j] = fv[j,:].reshape(12,25)
-    params[i,:] = pd.read_csv(to_sims + 'params/params' + str(i+1) + '.tsv', header=None, sep='\t').values
 
-# convert parameters to moments
-moments = np.zeros((numTensors, 2))
-moments[:,0] = params[:,0]*params[:,1]
-moments[:,1] = np.sqrt(params[:,0])*params[:,1]
+numSims = alpha_values.shape[0]
+keep_indices = [i for i in range(numSims) if np.max(alpha_values.values[i,:]) < 3.2e5]
+print('number of indices to retain: ', len(alpha_values.values[keep_indices,1]))
+mean_alpha = np.mean(alpha_values.values[keep_indices,:].flatten())
+print('mean alpha over rho: ', mean_alpha/rho)
 
-# log transform and normalize moments
-logMoments = np.log(moments)
-logCenter = np.mean(logMoments, axis=0)
-logScale = np.std(logMoments, axis=0)
-y = (logMoments - logCenter)/logScale
+# from shape and scale params compute moments of alpha distributions
+params.columns = ['shape', 'scale']
+mean = params.loc[keep_indices, 'shape']*params.loc[keep_indices, 'scale']
+stdev = np.sqrt(params.loc[keep_indices, 'shape'])*params.loc[keep_indices, 'scale']
 
-# filter out means less than 3000, designate smol
-smolMeanIndices = (moments[:,0] < 3000)
-smolX = x[smolMeanIndices,:,:,:]
+# log transform then standardize moments
+logMean = np.log(mean)
+logStDev = np.log(stdev)
+logMoments = pd.DataFrame({'logMean':logMean, 'logStDev':logStDev})
+standardizedLogMoments = (logMoments - logMoments.mean())/logMoments.std()
 
-# log transform and normalize smol moments
-smolLogMoments = np.log(moments[smolMeanIndices,:])
-smolLogCenter = np.mean(smolLogMoments, axis=0)
-smolLogScale = np.std(smolLogMoments, axis=0)
-smolY = (smolLogMoments - smolLogCenter)/smolLogScale
+# save moments for output
+logM = logMoments.mean().values
+logSD = logMoments.std().values
+np.save(to_training_data + 'center.npy', logM)
+np.save(to_training_data + 'scale.npy', logSD)
 
-# save data
-np.save(to_sims + 'trainingData/fvecs', x)
-np.save(to_sims + 'trainingData/targets', y)
-np.save(to_sims + 'trainingData/center', logCenter)
-np.save(to_sims + 'trainingData/scale', logScale)
-np.save(to_sims + 'trainingData/smolFvecs', smolX)
-np.save(to_sims + 'trainingData/smolTargets', smolY)
-np.save(to_sims + 'trainingData/smolCenter', smolLogCenter)
-np.save(to_sims + 'trainingData/smolScale', smolLogScale)
+# turn fvecs into 4d tensor of image matrices
+def get_images(fvecs, numSims):
+    """Takes data that has feature vectors
+    on each row and returns them as 4d np array
+    with dimension (numSims, numRows, numCols, numChannels)"""
+    result = np.empty((numSims, 12, 25, numChannels))
+    for j in range(numSims):
+        for k in range(numChannels):
+            result[j,:,:,k] = fvecs.iloc[[numChannels*j+k]].values.reshape(12,25)
+    return(result)
+
+# save fvecs
+images = get_images(fvecs, numSims)
+np.save(to_training_data + 'fvecs.npy', images)
+np.save(to_training_data + 'targets.npy', standardizedLogMoments)
