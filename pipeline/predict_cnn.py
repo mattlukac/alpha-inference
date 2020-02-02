@@ -8,14 +8,34 @@ plt.rcParams.update({'font.size': 22})
 import sys
 
 # inputs 
-trainingPop = sys.argv[1]
-region = sys.argv[2] 
-chromosome = sys.argv[3]
-predPop = sys.argv[4]
+modelPop = sys.argv[1]
+predPop = sys.argv[2]
+region = sys.argv[3] 
+scale = sys.argv[4]
+bestModelDir = sys.argv[5]
+numChannels = int(sys.argv[6])
+chrNum = sys.argv[7]
 
-# directories
-to_fvecs = 'humanSpecificSites/' + region + '/' + predPop + 'FvecsChr' + chromosome + '/'
-to_model = '../models/' + trainingPop + '/'
+numReplicates = 3000
+
+# get chromosome fvec directories
+to_fvecs = '1000Genomes/fvecs/' + predPop + '/' + region + '/' + scale + '/chr'
+
+# model directories
+to_model = '../models/' + modelPop + '/'
+to_best_model = to_model  + 'backups/' + bestModelDir + '/'
+
+# chromosome number to be appended when saving
+pred_file_name = to_best_model + predPop + 'Predictions/' + region + '_' + scale + '_chr' 
+
+
+##### FUNCTIONS #####
+
+def inferDistr(region, chrNum):
+    # load fvec from predPop/region/scale/chr#/
+    fvecs = pd.read_csv(to_fvecs + chrNum + '/all_fvecs.tsv', sep='\t')
+    fvecs, fvec_wins, indices = trim_fvecs(fvecs)
+    plotInferredDistr(numReplicates, fvecs, indices, region, chrNum)
 
 # partition feature vectors into the windows
 # and the actual feature vectors
@@ -33,19 +53,26 @@ def exp_transform(logz):
     log_sd = np.load(to_model + 'scale.npy')
     return np.exp(log_sd*logz + log_mean)
 
-# take nSamples number of samples from computed feature vectors
+# take numReplicates number of samples from computed feature vectors
 # and predict center and scale of the Gamma distribution for each
 # then plot the replicated predictions as a histogram
-def plotInferredDistr(nSamples, fvecs, indices, region='synonymous'):
-    preds = []
-    x = np.zeros((nSamples,12,25,200))
-    model=models.load_model(to_model + trainingPop + '_demog_logmodel')
-    for i in range(nSamples):
-        indicesToKeep = np.random.choice(indices, size=200, replace=False)
-        for j in range(200):
+def plotInferredDistr(numReplicates, fvecs, indices, region, chrNum):
+    # initialize array to predict on
+    x = np.zeros((numReplicates,12,25,numChannels))
+
+    # load model
+    model=models.load_model(to_best_model + modelPop + '_demog_logmodel')
+    
+    # for each replicate, randomly sample numChannels from number of fvecs
+    for i in range(numReplicates):
+        indicesToKeep = np.random.choice(indices, size=numChannels, replace=False)
+        for j in range(numChannels):
             x[i,:,:,j] = fvecs[indicesToKeep[j],:].reshape(12,25)
+
+    # get and save predictions 
     z_pred = model.predict(x)
     y_pred = exp_transform(z_pred)
+    np.save(pred_file_name + chrNum + '.npy', y_pred) # predictions saved
     y_pred_mean = np.mean(y_pred, axis=0)
     
     fig, ax = plt.subplots(1,2, figsize=(18,7))
@@ -59,11 +86,6 @@ def plotInferredDistr(nSamples, fvecs, indices, region='synonymous'):
     ax[1].axvline(y_pred_mean[1], linestyle='dashed', linewidth=2)
     ax[1].set_xlabel('Inferred alpha standard deviation', fontsize=20)
     
-    fig.savefig(to_model + predPop + 'Predictions/' + region + '_chr' + chromosome + '_distr.png')
+    fig.savefig(pred_file_name + chrNum + '_distr.png', dpi=1200)
 
-def inferDistr(region):
-    fvecs = pd.read_csv(to_fvecs + 'all_' + region + '.tsv', sep='\t')
-    fvecs, fvec_wins, indices = trim_fvecs(fvecs)
-    plotInferredDistr(1000, fvecs, indices, region=region)
-
-inferDistr(region)
+inferDistr(region, chrNum)
