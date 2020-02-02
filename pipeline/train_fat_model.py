@@ -62,32 +62,32 @@ def plotFit(x,y):
 
 # split into train, validation, and test sets
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.1)
-x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size = 0.2)
+x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size = 0.1)
 
 # define model
 model = models.Sequential()
 
-model.add(layers.Conv2D(512, (4,6), activation='relu', padding='same', name='conv2d_1',
+model.add(layers.Conv2D(256, 6, activation='relu', padding='same', name='conv2d_1',
                         input_shape=x_train.shape[1:]))
-model.add(layers.Dropout(0.1, name='dropout_1'))
-model.add(layers.Conv2D(512, (6,4), activation='relu', padding='same', name='conv2d_2'))
+model.add(layers.Dropout(0.3, name='dropout_1'))
+model.add(layers.Conv2D(512, 2, activation='relu', padding='same', name='conv2d_2'))
 model.add(layers.MaxPooling2D(2, name='maxpool2d_1'))
-model.add(layers.Conv2D(1024, (3,6), activation='relu', padding='same', name='conv2d_3'))
+model.add(layers.Conv2D(1024, 3, activation='relu', padding='same', name='conv2d_3'))
 model.add(layers.Dropout(0.2, name='dropout_2'))
-model.add(layers.Conv2D(2048, (2,3), activation='relu', padding='same', name='conv2d_4'))
+model.add(layers.Conv2D(2048, 3, activation='relu', padding='same', name='conv2d_4'))
 model.add(layers.MaxPooling2D(2, name='maxpool2d_2'))
-#model.add(layers.Conv2D(4096, 2, activation='relu', padding='same', name='conv2d_5'))
+#model.add(layers.Conv2D(2048, 3, activation='relu', padding='same', name='conv2d_5'))
 #model.add(layers.Dropout(0.3, name='dropout_3'))
 model.add(layers.Flatten(name='flatten'))
-model.add(layers.Dense(2048, name='dense_1'))
-model.add(layers.Dropout(0.2, name='dropout_4'))
-model.add(layers.Dense(512, name='dense_2'))
+#model.add(layers.Dense(4096, name='dense_1'))
+#model.add(layers.Dropout(0.2, name='dropout_4'))
+model.add(layers.Dense(2048, name='dense_2'))
 model.add(layers.Dropout(0.3, name='dropout_5'))
-model.add(layers.Dense(32, name='dense_3'))
-model.add(layers.Dropout(0.2, name='dropout_6'))
+model.add(layers.Dense(256, name='dense_3'))
+#model.add(layers.Dropout(0.2, name='dropout_6'))
 model.add(layers.Dense(2, name='dense_4'))
     
-model.compile(optimizer=optimizers.Adam(lr=0.0001), loss='mse', metrics=[])
+model.compile(optimizer=optimizers.Adam(lr=0.00001), loss='mse', metrics=[])
 
 # save model summary
 with open(to_model + 'summary.txt', 'w') as f:
@@ -104,7 +104,7 @@ checkpoint = callbacks.ModelCheckpoint(to_model + pop + '_demog_logmodel',
 
 history = model.fit(x_train, y_train, 
                     validation_data=[x_val, y_val],
-                    epochs=100, batch_size=1500,
+                    epochs=150, batch_size=500,
                     callbacks=[checkpoint])
 
 with open(to_model + pop + "_demog_history", 'wb') as my_pickle:
