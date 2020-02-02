@@ -29,7 +29,7 @@ fi
 files=( center.npy scale.npy )
 for filename in "${files[@]}"
 do
-  cp ../sims/${pop}/trainingData/${filename} ../models/${pop}/
+  cp ../sims/${pop}/trainingData/${filename} ../models/${pop}/new/
 done
 
 # create log file for the model
