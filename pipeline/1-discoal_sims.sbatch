@@ -10,6 +10,10 @@
 #SBATCH --mail-type=FAIL,TIME_LIMIT
 #SBATCH --mail-user=mlukac@uoregon.edu
 
+## similar to 1-discoal_sims_array.sbatch
+## used when feature vector calc has timed out
+## called with rerun_failed_fvecs.bash
+
 module load diploshic
 
 j=$1
@@ -50,7 +54,7 @@ export bigWinSize
 
 for i in `seq 0 $((${alphaDraws}-1))`; do
   eval ${!pop}
-  python /projects/kernlab/shared/diploSHIC_snakemake/diploSHIC/diploSHIC.py fvecSim diploid ../sims/${pop}/discout/discout${j}/alpha${i}.msOut ../sims/${pop}/fvecs/temp/alpha${i}_${j}.msOut.diploid.fvec --numSubWins ${numSubWins} --totalPhysLen ${bigWinSize}
+  python ../../../shared/diploSHIC_snakemake/diploSHIC/diploSHIC.py fvecSim diploid ../sims/${pop}/discout/discout${j}/alpha${i}.msOut ../sims/${pop}/fvecs/temp/alpha${i}_${j}.msOut.diploid.fvec --numSubWins ${numSubWins} --totalPhysLen ${bigWinSize}
   tail -n 1 ../sims/${pop}/fvecs/temp/alpha${i}_${j}.msOut.diploid.fvec >> ../sims/${pop}/fvecs/new/fvecs${j}.tsv
   rm ../sims/${pop}/fvecs/temp/alpha${i}_${j}.msOut.diploid.fvec
 done
