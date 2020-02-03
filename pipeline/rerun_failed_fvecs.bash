@@ -1,15 +1,16 @@
 #!/bin/bash
 
 pop=$1
-source config.txt
-lines="$alphaDraws "
+toSims=../sims/${pop}
+lines=$(grep 'alpha ' ${toSims}/sim.log | cut -f 3 -d ' ')
 
-wc -l ../sims/${pop}/fvecs/new/fvec* | grep -v $lines | grep -oP '(?<=/new/fvecs).*?(?=.tsv)' > failed_jobs.txt
+# retrieve fvec indices that timed out and rerun them
+wc -l ${toSims}/fvecs/new/fvec* | grep -v $lines | grep -oP '(?<=/new/fvecs).*?(?=.tsv)' > failed_jobs.txt
 while read jobNum; do 
-  rm ../sims/${pop}/alpha/alpha_values${jobNum}.tsv
-  rm ../sims/${pop}/discout/discout${jobNum}/*
-  rm ../sims/${pop}/fvecs/new/fvecs${jobNum}.tsv
-  rm ../sims/${pop}/params/params${jobNum}.tsv
+  rm ${toSims}/alpha/alpha_values${jobNum}.tsv
+  rm ${toSims}/discout/discout${jobNum}/*
+  rm ${toSims}/fvecs/new/fvecs${jobNum}.tsv
+  rm ${toSims}/params/params${jobNum}.tsv
   sbatch 1-discoal_sims.sbatch ${jobNum} ${pop}
 done < failed_jobs.txt
 
