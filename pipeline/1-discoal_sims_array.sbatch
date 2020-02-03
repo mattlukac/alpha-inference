@@ -16,6 +16,12 @@ module load diploshic
 j=${SLURM_ARRAY_TASK_ID}
 pop=$1
 
+#make sims directory if not exist
+if [ ! -d ../sims/${pop}/ ]
+then
+  bash make_sim_directory.bash $pop
+fi
+
 #read model parameter values
 source config.txt
 source populations.txt
