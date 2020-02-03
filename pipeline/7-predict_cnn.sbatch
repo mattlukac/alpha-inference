@@ -34,4 +34,4 @@ fi
 numChannels=$(grep 'alpha draws' ../sims/${modelPop}/sim.log | cut -f 3 -d ' ')
 
 # predict on regions in chromosome for predPop with modelPop model
-python3 predict_cnn.py $modelPop $predPop $region $scale $bestModelDir $numChannels $chromosome
+python3 7-predict_cnn.py $modelPop $predPop $region $scale $bestModelDir $numChannels $chromosome

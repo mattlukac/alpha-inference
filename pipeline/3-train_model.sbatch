@@ -39,7 +39,7 @@ trainingSetSize=$(ls ../sims/${pop}/params/* | wc -l)
 cp ../sims/${pop}/sim.log $about
 echo 'input size: ('12', '$numSubWins', '$numChannels')' >> $about
 echo 'training set size: '$trainingSetSize >> $about
-head -n 108 train_model.py | tail -n 43 >> $about
+head -n 108 3-train_model.py | tail -n 43 >> $about
 
 # train model
-python3 train_model.py $pop $numChannels > ../models/${pop}/new/training.log
+python3 3-train_model.py $pop $numChannels > ../models/${pop}/new/training.log

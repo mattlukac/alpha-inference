@@ -39,6 +39,8 @@ fi
 bedFile=humanSpecificSites/${region}/${scale}/chr${chromosome}_windows_hspec.bed
 nLines=$(wc -l < ${bedFile})
 
+# WRITE CASE FOR WHEN nLines < slurmArraySize
+
 # round down to nearest multiple of slurmArraySize and
 # get step size for slurmArraySize evenly spaced windows
 nLinesMod=$((${nLines} % $slurmArraySize))
