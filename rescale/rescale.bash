@@ -1,5 +1,10 @@
 #!/bin/bash
 
+## we take a file formated in Hudson's ms output
+## simulated under a chromosomal window of length L
+## and 'zoom in' to a smaller window of length l
+## then save the new file with prefix sliced
+
 # index for msOut file
 i=$1
 rescaledWindowSize=$2
