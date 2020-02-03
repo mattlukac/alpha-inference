@@ -19,7 +19,7 @@ pop=$1
 #make sims directory if not exist
 if [ ! -d ../sims/${pop}/ ]
 then
-  bash make_sim_directory.bash $pop
+  $(cd ../sims/ ; bash make_sim_directory.bash $pop)
 fi
 
 #read model parameter values

@@ -1,24 +1,23 @@
 #!/bin/bash
 
 pop=$1
-mkdir ../sims/$pop
-toSims=../sims/${pop}/
+mkdir $pop
 
 # make first level directories
 for name in alpha discout fvecs params trainingData; do
-  mkdir $toSims$name
+  mkdir $pop/$name
 
   # make discout subdirectories
   if [ ${name} == discout ]; then
     for k in $(seq 1 5000); do
-      mkdir $toSims$name'/discout'$k
+      mkdir $pop/$name'/discout'$k
     done
   fi
   
   # make fvecs subdirectories
   if [ ${name} == fvecs ]; then
-    mkdir $toSims$name'/new'
-    mkdir $toSims$name'/temp'
+    mkdir $pop/$name'/new'
+    mkdir $pop/$name'/temp'
   fi
 done
 
