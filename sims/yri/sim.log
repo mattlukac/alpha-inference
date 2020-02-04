@@ -1,0 +1,7 @@
+shape min: 0.3
+shape max: 8
+scale min: 50
+scale max: 1000
+alpha draws: 300
+big window size: 200000
+number of subwindows: 25
