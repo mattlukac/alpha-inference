@@ -6,38 +6,39 @@
 ## then save the new file with prefix sliced
 
 pop=$1
-i=$2 #index for msOut file
+j=$2 #index for discout directory
 rescaledWindowSize=$3
-j=$4 #index for discout directory
+c=$4 #index for msOut file
+
 discout=$pop/discout/discout$j
-bigWindowSize=$(head -n 1 $discout/alpha${i}.msOut | cut -f 4 -d ' ')
-headerLines=5  # don't include segsites line
-sampleSize=$(wc -l < $discout/alpha${i}.msOut)
+bigWindowSize=$(head -n 1 $discout/alpha${c}.msOut | cut -f 4 -d ' ')
+headerLines=5 
+sampleSize=$(wc -l < $discout/alpha${c}.msOut)
 sampleSize=$(($sampleSize - $headerLines - 1))
 
 # chop up msOut file into header (w/o segsites), pos, genos
-head -n $(($headerLines-1)) $discout/alpha${i}.msOut > $discout/alpha${i}.msOut.header
-head -n $(($headerLines+1)) $discout/alpha${i}.msOut | tail -n 1 | cut -f 2- -d ' ' > $discout/alpha${i}.msOut.positions
-tail -n $sampleSize $discout/alpha${i}.msOut > $discout/alpha${i}.msOut.genos
+head -n $(($headerLines-1)) $discout/alpha${c}.msOut > $discout/alpha${c}.msOut.header
+head -n $(($headerLines+1)) $discout/alpha${c}.msOut | tail -n 1 | cut -f 2- -d ' ' > $discout/alpha${c}.msOut.positions
+tail -n $sampleSize $discout/alpha${c}.msOut > $discout/alpha${c}.msOut.genos
 
 # use python to slice positions and genos 
-python rescale.py $discout/alpha${i}.msOut.positions $discout/alpha${i}.msOut.genos $bigWindowSize $rescaledWindowSize
+python rescale.py $discout/alpha${c}.msOut.positions $discout/alpha${c}.msOut.genos $bigWindowSize $rescaledWindowSize
 
 # update header with new segsites
-segSites=$(wc -w < $discout/alpha${i}.msOut.positions.sliced)
-echo "segsites: $segSites" >> $discout/alpha${i}.msOut.header
+segSites=$(wc -w < $discout/alpha${c}.msOut.positions.sliced)
+echo "segsites: $segSites" >> $discout/alpha${c}.msOut.header
 
 # add 'positions: ' back into sliced positions
-sed -i 's/^/positions: /' $discout/alpha${i}.msOut.positions.sliced
+sed -i 's/^/positions: /' $discout/alpha${c}.msOut.positions.sliced
 
 # sliced files will have 'sliced' prefix
 # recombine them to make sliced msOut file
-outFile=$discout/sliced${rescaledWindowSize}_alpha${i}.msOut
-cat $discout/alpha${i}.msOut.header > $outFile
-cat $discout/alpha${i}.msOut.positions.sliced >> $outFile
+outFile=$discout/sliced${rescaledWindowSize}_alpha${c}.msOut
+cat $discout/alpha${c}.msOut.header > $outFile
+cat $discout/alpha${c}.msOut.positions.sliced >> $outFile
 echo '' >> $outFile # add newline
-cat $discout/alpha${i}.msOut.genos.sliced >> $outFile
+cat $discout/alpha${c}.msOut.genos.sliced >> $outFile
 
 
 # clean directory
-rm $discout/alpha${i}.msOut.*
+rm $discout/alpha${c}.msOut.*
