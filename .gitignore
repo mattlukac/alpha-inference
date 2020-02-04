@@ -8,5 +8,9 @@ scripts/clinEff
 scripts/snpEff
 models/*
 !models/jpt
+models/jpt/*
+!models/jpt/backups
+models/jpt/backups/*
+models/jpt/backups/*/*
 !models/jpt/backups/*/jptPredictions/*png
 pipeline/3-send_data2deep.bash
