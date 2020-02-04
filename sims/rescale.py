@@ -31,5 +31,5 @@ for i in range(len(genos)):
     genos[i] = ''.join(rescaledGeno)
 
 # save sliced positions and genotypes
-np.savetxt('sliced' + positionsName, rescaledPositions, fmt='%.6f', newline=' ')
-np.savetxt('sliced' + genosName, genos, fmt='%s')
+np.savetxt(positionsName + '.sliced', rescaledPositions, fmt='%.6f', newline=' ')
+np.savetxt(genosName + '.sliced', genos, fmt='%s')
