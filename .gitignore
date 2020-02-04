@@ -3,6 +3,7 @@ pipeline/1000Genomes/
 pipeline/humanSpecificSites/
 pipeline/slurm*
 sims/*/
+!sims/*/sim.log
 scripts/clinEff
 scripts/snpEff
 models/*
