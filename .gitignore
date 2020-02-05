@@ -6,10 +6,12 @@ sims/*/*
 !sims/*/sim.log
 scripts/clinEff
 scripts/snpEff
+
+# do not ignore jpt predictions
 models/*
 !models/jpt
 models/jpt/*
 !models/jpt/backups
-models/jpt/backups/*
+!models/jpt/backups/*
+!models/jpt/backups/*/jptPredictions
 !models/jpt/backups/*/jptPredictions/*png
-pipeline/3-send_data2deep.bash
