@@ -16,7 +16,7 @@ fi
 
 # save fvec filenames that have 3 lines in wc3.txt
 wc -l ${direc}/*fvec | grep -v '2 ' > ${direc}/wc3.temp
-cut -c 10- ${direc}/wc3.temp > ${direc}/extraLine/extraLine.txt
+cut -c 10- ${direc}/wc3.temp | sed '/^total/ d' > ${direc}/extraLine/extraLine.txt
 rm ${direc}/wc3.temp
 
 # keep first two lines
@@ -33,7 +33,7 @@ firstFvec=$(ls -v ${direc}/*fvec | head -n 1) # gets first fvec file
 initFvec=$(basename ${firstFvec} | awk -F'[_]' '{print $1}') # saves prefix from it
 
 cat $firstFvec > ${direc}/all_fvecs.tsv
-for k in $(seq ${initFvec} ${nFvecs})
+for k in $(seq $initFvec $nFvecs)
 do
   # some of these files won't exist but oh well
   tail -n 1 ${direc}/${k}_* >> ${direc}/all_fvecs.tsv
