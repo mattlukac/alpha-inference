@@ -2,7 +2,7 @@
 #SBATCH --account=kernlab
 #SBATCH --partition=kern
 #SBATCH --nodes=1
-#SBATCH	--job-name=vcf_fvecs
+#SBATCH	--job-name=1KGfvecs
 #SBATCH --time 1:00:00
 #SBATCH --mem-per-cpu=10G
 #SBATCH	--ntasks=1
@@ -18,7 +18,9 @@
 
 module load diploshic
 
+
 #### INPUT PARAMETERS ####
+
 pop=$1
 region=$2
 scale=$3 # either 200kb or 1.1Mb
@@ -47,15 +49,7 @@ inFile=1000Genomes/vcfs/${pop}/chr${chromosome}.phase3.genotypes.recode.vcf
 diploSHIC=../../../shared/diploSHIC_snakemake/diploSHIC/diploSHIC.py
 
 
-# if region is synonymous, missense, 3', or 5'
-# compute every site's feature vectors
-if [ $region == synonymous ] || [ $region == missense ] || [ $region == 3prime_UTR ] || [ $region == 5prime_UTR ]
-then
-
-  numFvecs=$(wc -l < $bedFile)
-  stepSize=1
-  
-fi
+#### GET NUMBER OF FVECS AND STEP SIZE  ####
 
 # else if region is intergenic or intron
 # compute 3000 evenly spaced feature vectors
@@ -71,6 +65,19 @@ then
   stepSize=$((($numLines - $numLinesMod)/$numFvecs))
 
 fi
+
+# if region is synonymous, missense, 3', or 5'
+# compute every site's feature vectors
+if [ $region == synonymous ] || [ $region == missense ] || [ $region == 3prime_UTR ] || [ $region == 5prime_UTR ]
+then
+
+  numFvecs=$(wc -l < $bedFile)
+  stepSize=1
+  
+fi
+
+
+#### STEP THROUGH BED AND COMPUTE FVECS ####
 
 for step in $(1 numFvecs)
 do
@@ -88,9 +95,7 @@ do
   j=$(wc -l < $outFile)
   if [ $j == 1 ]
   then
-
     rm $outFile
-
   fi
 
 done
