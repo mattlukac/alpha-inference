@@ -6,14 +6,4 @@ sims/*/*
 !sims/*/sim.log
 scripts/clinEff
 scripts/snpEff
-
-# do not ignore jpt predictions
 models/*
-!models/jpt
-models/jpt/*
-!models/jpt/backups
-models/jpt/backups/*/*
-!models/jpt/backups/*/about.txt
-!models/jpt/backups/*/summary.txt
-!models/jpt/backups/*/jptPredictions
-models/jpt/backups/*/jptPredictions/*npy
