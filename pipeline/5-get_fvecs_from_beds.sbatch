@@ -79,7 +79,7 @@ fi
 
 #### STEP THROUGH BED AND COMPUTE FVECS ####
 
-for step in $(seq 1 numFvecs)
+for step in $(seq 1 $numFvecs)
 do
 
   # for each step get segStart and segEnd
