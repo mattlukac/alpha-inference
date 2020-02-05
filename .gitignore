@@ -12,6 +12,8 @@ models/*
 !models/jpt
 models/jpt/*
 !models/jpt/backups
-!models/jpt/backups/*
+models/jpt/backups/*/*
+!models/jpt/backups/*/about.txt
+!models/jpt/backups/*/summary.txt
 !models/jpt/backups/*/jptPredictions
-!models/jpt/backups/*/jptPredictions/*png
+models/jpt/backups/*/jptPredictions/*npy
