@@ -13,7 +13,7 @@ from contextlib import redirect_stdout
 pop = sys.argv[1]
 numChannels = int(sys.argv[2])
 
-training_data = '../sims/' + pop + '/trainingData/' #for loading
+training_data = '../sims/' + pop + '/multiscaleTrainingData/' #for loading
 to_model = '../models/' + pop + '/new/' #for saving
 
 # load data
