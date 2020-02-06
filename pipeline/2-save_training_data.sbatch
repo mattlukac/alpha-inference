@@ -37,7 +37,7 @@ then
   done
 fi
 
-numChannels=$(head -n 1 ../sims/${pop}/alpha_values.tsv | wc -w)
+numChannels=$(ls ../sims/${pop}/discout/discout1/alpha* | wc -l)
 rho=$(grep $pop populations.txt | cut -f 9 -d ' ')
 
 python3 2-save_training_data.py $pop $numChannels $rho

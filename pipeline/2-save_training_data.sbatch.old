@@ -22,6 +22,7 @@ module load python3/3.6.7
 pop=$1
 boot=${2:-noBoot}
 trainingSetSize=$(ls ../sims/${pop}/params/* | wc -l)
+numChannels=$(head -n 1 ../sims/$pop/discout/discout1/alpha* | wc -l)
 newFvecs=../sims/${pop}/fvecs/new/
 
 # if there are new fvecs, move them to parent directory
