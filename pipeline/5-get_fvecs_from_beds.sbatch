@@ -3,7 +3,7 @@
 #SBATCH --partition=kern
 #SBATCH --nodes=1
 #SBATCH	--job-name=1KGfvecs
-#SBATCH --time 1:00:00
+#SBATCH --time 200:00:00
 #SBATCH --mem-per-cpu=10G
 #SBATCH	--ntasks=1
 #SBATCH --cpus-per-task=1
@@ -52,12 +52,12 @@ diploSHIC=../../../shared/diploSHIC_snakemake/diploSHIC/diploSHIC.py
 #### GET NUMBER OF FVECS AND STEP SIZE  ####
 
 # else if region is intergenic or intron
-# compute 3000 evenly spaced feature vectors
-if [ $region == intergenic ] || [ $region == intron ]
+# compute evenly spaced feature vectors
+if [ $region == intergenic ] || [ $region == intron ] || [ $region == 3prime_UTR ]
 then
 
   numLines=$(wc -l < $bedFile)
-  numFvecs=3000 # number of fvecs per region in chromosome
+  numFvecs=2000 # number of fvecs per region in chromosome
   
   # round down to nearest multiple of numFvecs and
   # get step size for numFvecs evenly spaced windows
@@ -68,7 +68,7 @@ fi
 
 # if region is synonymous, missense, 3', or 5'
 # compute every site's feature vectors
-if [ $region == synonymous ] || [ $region == missense ] || [ $region == 3prime_UTR ] || [ $region == 5prime_UTR ]
+if [ $region == synonymous ] || [ $region == missense ] || [ $region == 5prime_UTR ]
 then
 
   numFvecs=$(wc -l < $bedFile)
