@@ -104,7 +104,7 @@ checkpoint = callbacks.ModelCheckpoint(to_model + pop + '_demog_logmodel',
 
 history = model.fit(x_train, y_train, 
                     validation_data=[x_val, y_val],
-                    epochs=200, batch_size=3000,
+                    epochs=200, batch_size=300,
                     callbacks=[checkpoint])
 
 with open(to_model + pop + "_demog_history", 'wb') as my_pickle:

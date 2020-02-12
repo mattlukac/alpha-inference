@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --account=kernlab
-#SBATCH --partition=c4140
+#SBATCH --partition=v100gpu
 #SBATCH --nodes=1
 #SBATCH	--job-name=train
 #SBATCH --time 2:00:00
@@ -19,7 +19,7 @@ source config.txt
 
 # get number of channels from training tensor
 export pop
-numChannels=$(python -c "import numpy as np; import os; pop = os.environ['pop']; x = np.load('../sims/' + pop + '/multiscaleTrainingData/fvecs.npy'); print(x.shape[3]); del x")
+numChannels=$(python -c "import numpy as np; import os; pop = os.environ['pop']; x = np.load('../sims/' + pop + '/trainingData/fvecs.npy'); print(x.shape[3]); del x")
 
 # make model directory if it doesn't exist
 if [ ! -d "../models/$pop/" ]
@@ -33,7 +33,7 @@ fi
 files=( center.npy scale.npy )
 for filename in "${files[@]}"
 do
-  cp ../sims/$pop/multiscaleTrainingData/${filename} ../models/$pop/new/
+  cp ../sims/$pop/trainingData/${filename} ../models/$pop/new/
 done
 
 # create log file for the model

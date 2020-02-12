@@ -13,7 +13,7 @@ from contextlib import redirect_stdout
 pop = sys.argv[1]
 numChannels = int(sys.argv[2])
 
-training_data = '../sims/' + pop + '/multiscaleTrainingData/' #for loading
+training_data = '../sims/' + pop + '/trainingData/' #for loading
 to_model = '../models/' + pop + '/new/' #for saving
 
 # load data
@@ -67,12 +67,12 @@ x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size = 
 # define model
 model = models.Sequential()
 
-model.add(layers.Conv2D(256, 6, activation='relu', padding='same', name='conv2d_1',
+model.add(layers.Conv2D(512, 6, activation='relu', padding='same', name='conv2d_1',
                         input_shape=x_train.shape[1:]))
 model.add(layers.Dropout(0.3, name='dropout_1'))
-model.add(layers.Conv2D(512, 2, activation='relu', padding='same', name='conv2d_2'))
+model.add(layers.Conv2D(1024, 2, activation='relu', padding='same', name='conv2d_2'))
 model.add(layers.MaxPooling2D(2, name='maxpool2d_1'))
-model.add(layers.Conv2D(1024, 3, activation='relu', padding='same', name='conv2d_3'))
+model.add(layers.Conv2D(2048, 3, activation='relu', padding='same', name='conv2d_3'))
 model.add(layers.Dropout(0.2, name='dropout_2'))
 model.add(layers.Conv2D(2048, 3, activation='relu', padding='same', name='conv2d_4'))
 model.add(layers.MaxPooling2D(2, name='maxpool2d_2'))
@@ -104,7 +104,7 @@ checkpoint = callbacks.ModelCheckpoint(to_model + pop + '_demog_logmodel',
 
 history = model.fit(x_train, y_train, 
                     validation_data=[x_val, y_val],
-                    epochs=150, batch_size=500,
+                    epochs=200, batch_size=200,
                     callbacks=[checkpoint])
 
 with open(to_model + pop + "_demog_history", 'wb') as my_pickle:
