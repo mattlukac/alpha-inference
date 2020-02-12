@@ -14,7 +14,7 @@ import sys
 # initialize directory and read tensor shape parameters
 pop = sys.argv[1] + '/'
 numTensors = int(sys.argv[2])
-numChannels = int(os.environ['numChannels'])
+numChannels = int(sys.argv[3])
 to_sims = '../sims/' + pop
 
 # initialize tensors to be saved
@@ -24,6 +24,7 @@ x = np.zeros((numTensors, 12, 25, numChannels))
 params = np.zeros((numTensors, 2))
 for i in range(numTensors):
     fv = pd.read_csv(to_sims + 'fvecs/fvecs' + str(i+1) + '.tsv', header=None, sep='\t').values
+    fv = fv[0:numChannels,:]
     for j in range(numChannels):
         x[i,:,:,j] = fv[j,:].reshape(12,25)
     params[i,:] = pd.read_csv(to_sims + 'params/params' + str(i+1) + '.tsv', header=None, sep='\t').values

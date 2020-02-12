@@ -20,24 +20,24 @@ module load python3/3.6.7
 #get population
 pop=$1
 
-if [ ! -f ../sims/${pop}/fvecs.tsv ]
+if [ ! -f ../sims/$pop/fvecs.tsv ]
 then
   #concatenate fvecs, alpha values, and params files
   #save them in sims directory
-  touch ../sims/${pop}/fvecs.tsv
-  touch ../sims/${pop}/params.tsv
-  touch ../sims/${pop}/alpha_values.tsv
+  touch ../sims/$pop/fvecs.tsv
+  touch ../sims/$pop/params.tsv
+  touch ../sims/$pop/alpha_values.tsv
 
   numSims=$(ls ../sims/${pop}/params/* | wc -l)
   for i in $(seq 1 ${numSims})
   do
-    cat ../sims/${pop}/fvecs/fvecs${i}.tsv >> ../sims/${pop}/fvecs.tsv
-    cat ../sims/${pop}/params/params${i}.tsv >> ../sims/${pop}/params.tsv
-    cat ../sims/${pop}/alpha/alpha_values${i}.tsv >> ../sims/${pop}/alpha_values.tsv
+    cat ../sims/$pop/fvecs/fvecs${i}.tsv >> ../sims/$pop/fvecs.tsv
+    cat ../sims/$pop/params/params${i}.tsv >> ../sims/$pop/params.tsv
+    cat ../sims/$pop/alpha/alpha_values${i}.tsv >> ../sims/$pop/alpha_values.tsv
   done
 fi
 
-numChannels=$(ls ../sims/${pop}/discout/discout1/alpha* | wc -l)
+numChannels=$(ls ../sims/$pop/discout/discout1/alpha* | wc -l)
 rho=$(grep $pop populations.txt | cut -f 9 -d ' ')
 
 python3 2-save_training_data.py $pop $numChannels $rho

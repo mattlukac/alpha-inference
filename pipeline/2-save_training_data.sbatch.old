@@ -17,12 +17,12 @@
 
 # To request bootstrapping provide a second argument
 
-module load python3/3.6.7
+module load python3
 
 pop=$1
 boot=${2:-noBoot}
-trainingSetSize=$(ls ../sims/${pop}/params/* | wc -l)
-numChannels=$(head -n 1 ../sims/$pop/discout/discout1/alpha* | wc -l)
+trainingSetSize=$(ls ../sims/$pop/params/* | wc -l)
+numChannels=200
 newFvecs=../sims/${pop}/fvecs/new/
 
 # if there are new fvecs, move them to parent directory
@@ -30,15 +30,14 @@ if [ "$(ls -A $newFvecs)" ]; then
   mv $newFvecs/* $newFvecs/../
 fi
 
-source config.txt
-export numChannels
 
 # do bootstrap or nah
 if [ $boot != noBoot ]
 then
+  source config.txt
   export numBootChannels
   export numBootSamples
   python3 2-save_training_data_with_boot.py $pop $trainingSetSize
 else
-  python3 2-save_training_data.py.old $pop $trainingSetSize
+  python3 2-save_training_data.py.old $pop $trainingSetSize $numChannels
 fi
