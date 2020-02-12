@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --account=kernlab
-#SBATCH --partition=c4140
+#SBATCH --partition=v100gpu
 #SBATCH --nodes=1
 #SBATCH	--job-name=predict
 #SBATCH --time 1:00:00
